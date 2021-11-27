@@ -1,0 +1,415 @@
+﻿
+@{
+	ViewBag.Title = "Yazı Serisi Oluştur";
+	Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+<!--Image Insert-->
+<div class="modal" id="as-image">
+	<div class="modal-content" style="width:70%;margin-top:50px;">
+		<div class="modal-top">
+			<div class="title"><i class="fa fa-images"></i>&nbsp;&nbsp;Görsel Ekle</div>
+			<div class="close"><i class="fa fa-times"></i></div>
+		</div>
+		<div class="modal-body" style="height:75vh;">
+
+			<div class="tab-control">
+				<!--Tab header-->
+				<div class="tab-header">
+					<ul>
+						<li>
+							<a href="#choose" data-index="choose"><i class="fa fa-photo-video"></i>Yüklenen Resimler</a>
+						</li>
+						<li>
+							<a href="#upload" data-index="upload"><i class="fa fa-upload"></i>Sunucuya Yükle</a>
+						</li>
+					</ul>
+				</div>
+				<!--Tab header-->
+				<!--Tab content-->
+				<div class="tab-content">
+					<!--Image List Tab-->
+					<div class="tab-item" data-tab="choose">
+						<div class="gallery">
+							<div class="gallery-content" data-columns="7" id="cde-gallery-content">
+
+							</div>
+						</div>
+					</div>
+					<!--Image List Tab-->
+					<!--Image Upload-->
+					<div class="tab-item" data-tab="upload">
+						<div class="file-upload">
+							<div class="upload-file-area" id="drag-area">
+								Yüklemek istediğiniz resimleri bu alana sürükleyiniz..
+							</div>
+						</div>
+
+						<ul id="images"></ul>
+					</div>
+					<!--Image Upload-->
+				</div>
+				<!--Tab content-->
+			</div>
+
+		</div>
+		<div class="modal-footer">
+			<button class="btn btn-primary" id="insert-image-btn">Ekle</button>
+		</div>
+	</div>
+</div>
+<!--Image Insert-->
+
+<div class="header">
+	<div class="title"><i class="fa fa-mail-bulk fa-lg"></i>&nbsp;&nbsp;YAZI SERİSİ OLUŞTUR</div>
+</div>
+<div class="content">
+
+	<div class="alert" id="alert">
+		<div class="message"></div>
+		<div class="close"><i class="fa fa-times"></i></div>
+	</div>
+
+	<div class="form-wizard">
+		<div class="form-steps">
+			<div class="step active">
+				<i class="flaticon-exclamation-1"></i>
+				<span>Seri Makale Bilgileri</span>
+			</div>
+
+			<div class="seperator">
+				<i class="flaticon2-right-arrow"></i>
+			</div>
+
+			<div class="step">
+				<i class="flaticon-map"></i>
+				<span>Kategorileri Girin</span>
+			</div>
+
+			<div class="seperator">
+				<i class="flaticon2-right-arrow"></i>
+			</div>
+
+			<div class="step">
+				<i class="flaticon-folder-1"></i>
+				<span>Makeleleri Seçin</span>
+			</div>
+		</div>
+		<!--Birinci Adım formu-->
+		<div class="form-step-content" id="first-step-form">
+
+			<div class="form-item">
+				<label>Makale serisi ismi giriniz.</label>
+				<div class="form-control">
+					<input type="text" name="SeriesName" placeholder="Makale serisi ismi.." />
+				</div>
+			</div>
+
+			<div class="form-item">
+				<label>Makale serisi için kısa bir açıklama giriniz.</label>
+				<div class="form-control">
+					<textarea name="SeriesDescription" placeholder="Kısa açıklama.."></textarea>
+				</div>
+			</div>
+
+			<div class="form-item">
+				<label>Makale serisi için görsel seçiniz.</label>
+				<div class="form-control">
+					<input type="hidden" name="SeriesImage" value="" />
+					<a href="javascript:void(0)" data-trigger="modal" data-target="#as-image">Görsel Seç</a>
+					<br />
+					<img id="image-prv" />
+				</div>
+			</div>
+		</div>
+		<!--Birinci Adım formu-->
+		<!--İkinci Adım formu-->
+		<div class="form-step-content" id="second-step-form" style="display:none">
+			<div class="form-item">
+				<div class="form-control">
+					<input type="text" name="category_name" placeholder="Kategori ismi giriniz.." style="width:90%;" />
+					<button class="btn btn-primary" id="ct-insert-btn" style="float:right;">Ekle</button>
+				</div>
+			</div>
+
+			<div class="ct-list" id="ct-list"></div>
+		</div>
+		<!--İkinci Adım formu-->
+		<!--Üçüncü Adım formu-->
+		<div class="form-step-content" id="third-step-form" style="display:none">
+			<form method="post" id="series-data-form">
+				<input type="hidden" value="1" name="name" />
+				<div class="form-item">
+					<label>Kategori Seçiniz</label>
+					<div class="form-control">
+						<select id="category-list" style="width:100%;">
+						</select>
+					</div>
+				</div>
+
+				<div class="form-item">
+					<label>Makale Seçiniz</label>
+					<div class="form-control">
+						<div class="searc-control">
+							<input type="text" name="article-title" placeholder="Kategori ismi giriniz.." />
+							<ul class="search-complate" id="autocomplate-result">
+							</ul>
+						</div>
+					</div>
+					<ol class="form-control sirala" id="selected-article">
+					</ol>
+				</div>
+			</form>
+		</div>
+		<!--Üçüncü Adım formu-->
+
+		<div class="form-wizard-footer" id="first-step">
+			<div class="form-item">
+				<div class="form-control">
+					<button class="btn btn-primary" style="float:right;display:none;" id="save-btn">Kaydet</button>
+					<button class="btn btn-primary" id="next-step" style="float: right;margin-right: 30px;">Sonraki Adım&nbsp;&nbsp;&nbsp;<i class="fa fa-chevron-right"></i></button>
+					<button class="btn btn-blue" id="back-step" style="float:left;display:none;"><i class="fa fa-chevron-left"></i>&nbsp;&nbsp;&nbsp;Önceki Adım</button>
+					<div class="clear-fix"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</div>
+
+<script>
+
+	var sortablelist = document.getElementById('selected-article');
+	new Sortable(sortablelist, {
+		animation: 150,
+		ghostClass: 'sortable-ghost'
+	});
+
+	$(document).ready(function () {
+
+		getEditorImages(document.getElementById('cde-gallery-content'));
+
+		//editor image insert
+		var galleryContent = document.getElementById('cde-gallery-content');
+		var idealColumnWidth = galleryContent.clientWidth < 640 ? 145 : 150;
+
+		window.addEventListener('resize', function () {
+			var column = galleryContent.getAttribute('data-columns');
+			var wd = Math.round(galleryContent.clientWidth / idealColumnWidth);
+			galleryContent.setAttribute('data-columns', wd);
+		});
+
+		//Drag-Drop resim yükleme.
+		$('#drag-area').on('dragover', function (event) {
+			event.preventDefault();
+			$(this).addClass('drag-active');
+		});
+
+		$('#drag-area').on('dragleave', function () {
+			$(this).removeClass('drag-active');
+		});
+
+		$('#drag-area').on('drop', function (event) {
+			event.preventDefault();
+
+			$(this).removeClass('drag-active');
+
+			var file_list = event.originalEvent.dataTransfer.files;
+
+			for (var i = 0; i < file_list.length; i++) {
+				var formData = new FormData();
+				formData.append('file', file_list[i]);
+
+				$.ajax({
+					url: '/Media/DoUpload',
+					type: 'POST',
+					data: formData,
+					contentType: false,
+					cache: false,
+					processData: false,
+					async: false,
+					success: function (data) {
+						if (data.status) {
+							$('#images').append('<li><div class="upload-preview"><img src="https://localhost:44354/uploads/thumbnail/' + data.fileName + '"/></div><div class="upload-filename">' + data.fileName + '<br/><span><i class="fa fa-check"></i>&nbsp;&nbsp;&nbsp;Yüklendi</span></div></li>');
+						} else {
+							alert('dosya yüklenemedi.');
+						}
+					}
+				});
+			}
+
+			getEditorImages(document.getElementById('cde-gallery-content'));
+		});
+
+		//Diğer kontroller.
+		$('#insert-image-btn').click(function () {
+			if ($('#cde-gallery-content .thumbnail.selected').length > 0) {
+				var id = $('#cde-gallery-content .thumbnail.selected').data('image-no');
+				var image = $('#cde-gallery-content .thumbnail.selected').data('image');
+
+				$('input[name="SeriesImage"]').val(id);
+				$('#image-prv').attr('src', 'http://localhost:9000/uploads/medium/' + image);
+
+				$('.modal-top .close').trigger('click');
+			}
+		});
+
+		$('#ct-insert-btn').click(function () {
+			var category = $('input[name="category_name"]').val();
+			if (category.trim().length > 3) {
+				var html = '<div class="form-item"><div class="form-control"><input type="text" name="Title[]" placeholder="Kategori ismi giriniz.." style="width:90%;" value="' + category.trim() + '"/><button class="btn btn-danger btn-sil" style="float:right;">Sil</button></div></div>';
+				$('#ct-list').append(html);
+				$('input[name="category_name"]').val('').focus();
+			} else {
+				alert('Girilen ifade kategori ismi için çok kısa.');
+			}
+		});
+
+		$('body').on('click', '.btn-sil', function () {
+			$(this).parent().parent().remove();
+		});
+
+		$('#next-step').click(function () {
+			if ($('#third-step-form').is(':visible')) {
+				var i = 0;
+				$('#category-list').html('');
+				$('#selected-article').html('');
+
+				$('#second-step-form').find('input').not('input[name="category_name"]').each(function () {
+					$('#category-list').append('<option value="' + i + '">' + $(this).val() + '</option>');
+					$('#selected-article').append('<li class="article-category-box"><h1>' + (i + 1) + ' - ' + $(this).val() + '</h1><ul id="item-' + i + '"></ul><input type="hidden" value="' + $(this).val() + '" name="CategoryTitle[]"/></li>');
+					i++;
+				});
+
+				$('#category-list').find('option:eq(0)').prop('selected', true);
+			}
+		});
+
+		$('#ct-list').on('click', '.btn-sil', function () {
+			$('#ct-list .form-item:eq(' + $(this).parent().parent().index() + ')').remove();
+		});
+
+		$('input[name="article-title"]').keypress(function () {
+			var query = $(this).val();
+			query = query.trim();
+
+			if (query.length > 1) {
+				$.ajax({
+					type: 'POST',
+					url: '/ArticleSeries/Search',
+					data: { 'q': query },
+					success: function (res) {
+						var el = $('#autocomplate-result');
+						el.html('');
+
+						if (res.status) {
+							if (res.data.length > 0) {
+								$.each(res.data, function (index, item) {
+									el.append('<li data-id="' + item.ID + '">' + item.Title + '</li>');
+								});
+							} else {
+								el.append('<li>Eşleşen sonuç bulunamadı.</li>');
+							}
+						} else {
+							el.append('<li>Eşleşen sonuç bulunamadı.</li>');
+						}
+
+						el.slideDown();
+					}
+				})
+			}
+		});
+
+		$('#autocomplate-result').on('click', 'li', function () {
+			var id = $(this).data('id');
+			var title = $(this).text();
+			var category_id = $('#category-list').val();
+
+			$('#item-' + category_id).append('<li><input type="hidden" name="article[]" value="' + id + '"/><div class="article-item"><div>' + title + '</div><div class="close"><a href="javascript:void(0)" class="delete-article"><i class="fa fa-times"></i></a></div></div></li>');
+
+			$('#autocomplate-result').slideUp();
+			$('input[name="article-title"]').val('').focus();
+		});
+
+		$('body').on('click', 'a.delete-article', function () {
+			$(this).closest('li').remove();
+		});
+
+		$('#save-btn').click(function () {
+
+			var dataArr = [];
+
+			$('#selected-article > li').each(function () {
+				var ct = $(this).find('input[name="CategoryTitle[]"]').val();
+
+				var articles = [];
+				$(this).find('ul > li').each(function () {
+					articles.push($(this).find('input[type="hidden"]').val());
+				});
+
+				dataArr.push({ "CategoryTitle": ct, "Articles": articles });
+
+			});
+
+			$.ajax({
+				type: 'POST',
+				url: '/ArticleSeries/Insert',
+				data: JSON.stringify({ 'SeriesName': $('input[name="SeriesName"]').val(), 'ImageID': $('input[name="SeriesImage"]').val(), 'Description': $('textarea[name="SeriesDescription"]').val(), 'ArticleSeriesData': dataArr }),
+				contentType: "application/json; charset=utf-8",
+				dataType: "json",
+				success: function (data) {
+
+					if (data.status) {
+						$('#alert').removeClass('danger').addClass('success');
+					} else {
+						$('#alert').removeClass('success').addClass('danger');
+					}
+
+					$('#alert .message').html(data.message);
+
+					$('#alert').slideDown();
+				}
+			});
+		});
+	});
+
+	function getEditorImages(galleryContent) {
+
+		galleryContent.innerHTML = '';
+
+		var req = new XMLHttpRequest();
+		req.onreadystatechange = function () {
+			if (this.readyState == 4 && this.status == 200) {
+				JSON.parse(this.responseText).forEach(function (item) {
+					var thumbnail = document.createElement('div');
+					thumbnail.setAttribute('data-image', item.Title);
+					thumbnail.setAttribute('data-image-no', item.ID);
+					thumbnail.className = 'thumbnail';
+
+					var imageTag = document.createElement('img');
+					imageTag.setAttribute('src', 'http://localhost:9000/uploads/thumbnail/' + item.Title);
+
+					thumbnail.appendChild(imageTag);
+					thumbnail.addEventListener('click', function (e) {
+						document.querySelectorAll('.thumbnail').forEach(function (thmb) {
+							thmb.classList.remove('selected');
+						});
+
+						if (e.target.tagName === 'IMG') {
+							e.target.parentElement.classList.add('selected');
+							image = e.target.parentElement.getAttribute('data-image');
+						} else {
+							e.target.classList.add('selected');
+							image = e.target.getAttribute('data-image');
+						}
+					});
+
+					galleryContent.appendChild(thumbnail);
+				});
+			}
+		};
+
+		req.open('POST', '/Media/EditorImageList', true);
+		req.send();
+	}
+</script>

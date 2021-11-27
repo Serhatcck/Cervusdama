@@ -1,0 +1,28 @@
+﻿<div class="header-content">
+	<div class="logo">
+		<img src="~/Content/images/logo.svg" alt="Cervus Dama Logo" />
+		<span class="logo-red">Cervus</span><span class="logo-green">Dama</span>&nbsp;<small>(Beta)</small>
+	</div>
+	<div class="menu">
+		<ul>
+			<li><a href="@Url.RouteUrl("HomaPage")">Anasayfa</a></li>
+			<li><a href="@Url.RouteUrl("NoticesAndPolicies")">Kurallar</a></li>
+			<li><a href="@Url.RouteUrl("About")">Hakkında</a></li>
+
+			<li class="seperator">&nbsp;</li>
+			<li><a href="@Url.RouteUrl("Articles", new { slug = "" })">Makale</a></li>
+			<li><a href="@Url.RouteUrl("Questions")">Soru & Cevap</a></li>
+
+			@if (!User.Identity.IsAuthenticated)
+			{
+				<li><a href="javascript:void(0)" data-target="#register-box" data-trigger="modal">Kaydol</a></li>
+				<li><a href="javascript:void(0)" data-target="#login-box" data-trigger="modal">Giriş Yap</a></li>
+			}
+			else
+			{
+				<li><a href="@Url.RouteUrl("UserProfile", new { slug = "" })">Profil</a></li>
+				<li><a href="@Url.RouteUrl("LogOut")">Çıkış</a></li>
+			}
+		</ul>
+	</div>
+</div>

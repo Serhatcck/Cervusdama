@@ -1,0 +1,38 @@
+﻿<!DOCTYPE html>
+<html lang="tr">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="icon" href="~/Content/images/logo.png" type="image/x-icon" />
+	<link href="~/Content/third-party/cdicons/css/cdicons.css" rel="stylesheet" />
+	<link href="~/Content/third-party/Devicon/devicon.min.css" rel="stylesheet" />
+	<link href="~/Content/style/style.css" rel="stylesheet" />
+	<link href="~/Content/third-party/prismjs/prism_light.css" rel="stylesheet" />
+	<link href="~/Content/third-party/prismjs/prism_dark.css" rel="stylesheet" />
+	<script src="~/Content/script/jquery-3.5.1.min.js"></script>
+	<script src="~/Content/script/script.js"></script>
+	<script src="~/Content/third-party/prismjs/prism.js"></script>
+	<title>Cervus Dama - @ViewBag.Title</title>
+</head>
+<body class="article-body">
+
+	<header>
+		@Html.Partial("Partials/MainMenu")
+	</header>
+
+	<div class="content">
+
+		@if (!User.Identity.IsAuthenticated)
+		{
+			@Html.Partial("Partials/Login", new CervusDama.Data.Model.UserModel.LoginModel());
+			@Html.Partial("Partials/Register", new CervusDama.Data.Model.UserModel.RegisterModel());
+		}
+
+		@RenderBody()
+	</div>
+
+	<button class="scroll-top">
+		<i class="cdi cdi-arrow-up-alt2"></i>
+	</button>
+</body>
+</html>

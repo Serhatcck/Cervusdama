@@ -1,0 +1,206 @@
+﻿@model IEnumerable<CervusDama.Data.Model.AnswerModel.QuestionAnswerModel>
+@using CervusDama.Admin.Helpers
+@{
+	ViewBag.Title = "Cevaplar";
+	Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+<!--Answer Detail-->
+<div class="lightbox" id="answer-detail">
+	<div class="dialog-box">
+		<div class="top">
+			<div class="title"><i class="fa fa-comment"></i>&nbsp;&nbsp;&nbsp;Cevap detayı..</div>
+			<div class="close">
+				<a href="javascript:void(0)" onclick="$('#answer-detail').fadeOut()"><i class="fa fa-times"></i></a>
+			</div>
+		</div>
+		<div class="content" id="dialog-content">
+			<h3>Cevap detayları</h3>
+			<table class="user-table" id="detail-table">
+				<tbody>
+					<tr>
+						<td>ID</td>
+						<td>:</td>
+						<td></td>
+					</tr>
+					<tr>
+						<td>Gönderen</td>
+						<td>:</td>
+						<td></td>
+					</tr>
+					<tr>
+						<td>Gönderim tarihi</td>
+						<td>:</td>
+						<td></td>
+					</tr>
+					<tr>
+						<td>Soru Başlığı</td>
+						<td>:</td>
+						<td></td>
+					</tr>
+					<tr>
+						<td>Oylama</td>
+						<td>:</td>
+						<td></td>
+					</tr>
+					<tr>
+						<td>Durum</td>
+						<td>:</td>
+						<td></td>
+					</tr>
+				</tbody>
+			</table>
+			<h3>Cevap metni:</h3>
+			<div id="answer-content" class="text-content"></div>
+		</div>
+		<div class="footer"></div>
+	</div>
+</div>
+<!--Answer Detail-->
+
+<div class="header">
+	<div class="title"><i class="fa fa-list fa-lg"></i>&nbsp;&nbsp;SORU CEVAPLARI</div>
+</div>
+<div class="content">
+	<div class="alert" id="alert">
+		<div class="message"></div>
+		<div class="close"><i class="fa fa-times"></i></div>
+	</div>
+
+	<table class="data-table strip hovered">
+		<thead>
+			<tr>
+				<th class="check">#</th>
+				<th>Soru Başlık</th>
+				<th>Ekleyen</th>
+				<th class="date">Eklenme Tarihi</th>
+				<th>Oylar</th>
+				<th class="prc" colspan="4">İşlemler</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var item in Model)
+			{
+				<tr>
+					<td class="center"><input type="checkbox" /></td>
+					<td>@item.QuestionTitle</td>
+					<td>@item.UserInfo.FirstName @item.UserInfo.LastName</td>
+					<td>@item.CreateAt.ToString("dd MMMM yyyy HH:mm")</td>
+					<td>
+						<span style="color: #d15b47"><i class="fa fa-long-arrow-alt-down"></i> @item.DislikeCount</span>
+						&nbsp;&nbsp;&nbsp;&nbsp;
+						<span style="color: #69aa46"><i class="fa fa-long-arrow-alt-up"></i> @item.LikeCount</span>
+					</td>
+					<td class="option">
+						<a href="javascript:void(0)" data-action="answer-detail" data-id="@item.ID"><i class="fa fa-bars"></i></a>
+					</td>
+					<td class="option">
+						<a href="@Url.RouteUrl("AnswerEdit", new { id = item.ID })" class="green edit-link"><i class="fa fa-edit"></i></a>
+					</td>
+					<td class="option">
+						<a href="javascript:void(0)" data-id="@item.ID" class="@(item.Status == 1 ? "blue" : "ban") ban-link"><i class="fa fa-ban"></i></a>
+					</td>
+					<td class="option">
+						<a href="javascript:void(0)" data-id="@item.ID" class="remove delete-link"><i class="fa fa-times"></i></a>
+					</td>
+				</tr>
+			}
+		</tbody>
+		<tfoot>
+			<tr>
+				<td colspan="9">
+					@Html.Pager((int)ViewBag.currentPage, (int)ViewBag.totalData, "/cevaplar")
+				</td>
+			</tr>
+		</tfoot>
+	</table>
+</div>
+<script>
+	$(document).ready(function () {
+
+		$('.delete-link').click(function () {
+			var res = confirm('Cevabı silmek istediğinizden emin misiniz?');
+
+			if (res == true) {
+				$.ajax({
+					type: 'POST',
+					url: '/Answer/Delete',
+					data: { 'id': $(this).data('id') },
+					success: function (data) {
+						if (data.status) {
+							$('#alert').removeClass('danger').addClass('success');
+						} else {
+							$('#alert').removeClass('success').addClass('danger');
+						}
+
+						$('#alert .message').html(data.message);
+
+						$('#alert').slideDown();
+
+						setTimeout(function () {
+							window.location.reload();
+						}, 2000);
+					}
+				});
+			}
+		});
+
+		$('.ban-link').click(function () {
+			$.ajax({
+				type: 'POST',
+				url: '/Answer/Block',
+				data: { 'id': $(this).data('id') },
+				success: function (data) {
+					if (data.status) {
+						$('#alert').removeClass('danger').addClass('success');
+					} else {
+						$('#alert').removeClass('success').addClass('danger');
+					}
+
+					$('#alert .message').html(data.message);
+
+					$('#alert').slideDown();
+
+					setTimeout(function () {
+						window.location.reload();
+					}, 2000);
+				}
+			});
+		});
+
+		$('a[data-action="answer-detail"]').click(function () {
+			var answerID = $(this).data('id');
+
+			$.ajax({
+				type: 'POST',
+				url: '/Answer/Detail',
+				data: { "id": answerID },
+				success: function (res) {
+
+					console.log(res);
+
+					$('#answer-detail').fadeIn();
+
+					if (res.status) {
+
+						$('#detail-table > tbody > tr:eq(0) > td:eq(2)').html(res.data.ID);
+						$('#detail-table > tbody > tr:eq(1) > td:eq(2)').html(res.data.UserInfo.FirstName + ' ' + res.data.UserInfo.LastName);
+						$('#detail-table > tbody > tr:eq(2) > td:eq(2)').html(dateParser(res.data.CreateAt));
+						$('#detail-table > tbody > tr:eq(3) > td:eq(2)').html(res.data.QuestionTitle);
+						$('#detail-table > tbody > tr:eq(4) > td:eq(2)').html('<span style="color: #d15b47"><i class="fa fa-long-arrow-alt-down"></i> ' + res.data.DislikeCount + '</span>&nbsp;&nbsp;&nbsp;&nbsp;<span style="color: #69aa46"><i class="fa fa-long-arrow-alt-up"></i> ' + res.data.LikeCount + '</span>');
+						$('#detail-table > tbody > tr:eq(5) > td:eq(2)').html(res.data.Status == 1 ? 'Yayında.' : 'Engelli.');
+
+						$('#answer-content').html(res.data.Content);
+					
+						$('#answer-detail').fadeIn();
+
+					} else {
+						$('#alert').removeClass('success').addClass('danger');
+						$('#alert .message').html(res.message);
+						$('#alert').slideDown();
+					}
+				}
+			});
+		});
+	});
+</script>

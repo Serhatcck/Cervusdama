@@ -1,0 +1,27 @@
+﻿@model CervusDama.Data.Model.CommentModel.CommentEditModel
+
+
+@if (User.Identity.IsAuthenticated)
+{
+	using (Html.BeginForm("EditArticleComment", "Comment", FormMethod.Post, new { id = "comment-edit-form", style= "display:none;" }))
+	{
+		@Html.AntiForgeryToken()
+
+		<div class="form-item">
+			<div class="form-control">
+				@Html.TextAreaFor(m => m.CommentContent, new { placeholder = "Yorum İçeriği..", style = "height:100px;", id = "comment-edit-content" })
+				@Html.HiddenFor(m => m.ArticleSlug)
+				@Html.HiddenFor(m => m.ArticleID)
+				@Html.HiddenFor(m => m.CommentID)
+			</div>
+		</div>
+
+		<div class="form-item">
+			<div class="form-control" style="text-align:right;">
+				<span style="float:left;" id="letter-counter"></span>
+				<button class="btn btn-primary" type="submit"><i class="cdi cdi-share-alt"></i> Yorum Düzenle</button>
+				<button class="btn btn-danger" type="button" id="form-btn-cancel">İptal</button>
+			</div>
+		</div>
+	}
+}

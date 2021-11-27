@@ -1,0 +1,287 @@
+﻿@model CervusDama.Data.Model.CategoryModel.CategoryInsertModel
+@{
+	ViewBag.Title = "Kategoriler";
+	Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+
+<div class="header">
+	<div class="title"><i class="fa fa-sitemap fa-lg"></i>&nbsp;&nbsp;KATEGORİLER</div>
+	<a href="/Category/Import">İçeri Aktar&nbsp;&nbsp;&nbsp;&nbsp;</a>
+</div>
+
+<div class="alert" id="update-alert">
+	<div class="message"></div>
+	<div class="close"><i class="fa fa-times"></i></div>
+</div>
+
+<div class="content">
+
+	<div class="split-container">
+		<div class="left-container">
+			<!--Insert Form-->
+			<div class="form" id="insert-form">
+				@using (Html.BeginForm("Index", "Category", FormMethod.Post))
+				{
+					Html.ValidationSummary(true);
+
+					<div class="form-item">
+						@Html.LabelFor(m => m.Title)
+						<div class="form-control">
+							@Html.TextBoxFor(m => m.Title, new { placeholder = "Kategori adı.." })
+							@Html.ValidationMessageFor(m => m.Title)
+						</div>
+					</div>
+
+					<div class="form-item">
+						@Html.LabelFor(m => m.Description)
+						<div class="form-control">
+							@Html.TextAreaFor(m => m.Description, new { placeholder = "Kategori açıklaması.." })
+							@Html.ValidationMessageFor(m => m.Description)
+						</div>
+					</div>
+
+					<div class="form-item">
+						@Html.LabelFor(m => m.Icon)
+						<div class="form-control">
+							@Html.TextBoxFor(m => m.Icon, new { placeholder = "Icon.." })
+							@Html.ValidationMessageFor(m => m.Icon)
+						</div>
+					</div>
+
+					<div class="form-item">
+						@Html.LabelFor(m => m.Color)
+						<div class="form-control">
+							@Html.TextBoxFor(m => m.Color, new { placeholder = "Icon rengi.." })
+							@Html.ValidationMessageFor(m => m.Color)
+						</div>
+					</div>
+
+					<div class="form-item">
+						@Html.LabelFor(m => m.Slug)
+						<div class="form-control">
+							@Html.TextBoxFor(m => m.Slug, new { placeholder = "Slug ismi.." })
+							@Html.ValidationMessageFor(m => m.Slug)
+							<small>Kategori isminin URL için oluşturulmuş halidir. Boş bırakılırsa sistem tarafından otomatik oluşturulacaktır. Tümü küçük harf, rakam ve - işareti içerebilir.</small>
+						</div>
+					</div>
+
+					<div class="form-item">
+						@Html.LabelFor(m => m.ParentID)
+						<div class="form-control">
+							@Html.DropDownListFor(m => m.ParentID, Model.Parents)
+							<small>Kategorileri hiyerarşik bir şekilde organize edebilirsiniz.</small>
+						</div>
+					</div>
+
+					<div class="form-item">
+						<div class="form-control align-right">
+							<input type="submit" value="Kategori Oluştur" class="btn btn-primary" />
+						</div>
+					</div>
+				}
+			</div>
+			<!--Insert Form-->
+			<!--Update Form-->
+			<div class="form" id="update-form" style="display:none;">
+				@using (Html.BeginForm("Edit", "Category", FormMethod.Post))
+				{
+					Html.ValidationSummary(true);
+
+					@Html.HiddenFor(m => m.ID)
+
+					<div class="form-item">
+						@Html.LabelFor(m => m.Title)
+						<div class="form-control">
+							@Html.TextBoxFor(m => m.Title, new { placeholder = "Kategori adı.." })
+							@Html.ValidationMessageFor(m => m.Title)
+						</div>
+					</div>
+
+					<div class="form-item">
+						@Html.LabelFor(m => m.Description)
+						<div class="form-control">
+							@Html.TextAreaFor(m => m.Description, new { placeholder = "Kategori açıklaması.." })
+							@Html.ValidationMessageFor(m => m.Description)
+						</div>
+					</div>
+
+					<div class="form-item">
+						@Html.LabelFor(m => m.Icon)
+						<div class="form-control">
+							@Html.TextBoxFor(m => m.Icon, new { placeholder = "Icon.." })
+							@Html.ValidationMessageFor(m => m.Icon)
+						</div>
+					</div>
+
+					<div class="form-item">
+						@Html.LabelFor(m => m.Color)
+						<div class="form-control">
+							@Html.TextBoxFor(m => m.Color, new { placeholder = "Icon rengi.." })
+							@Html.ValidationMessageFor(m => m.Color)
+						</div>
+					</div>
+
+					<div class="form-item">
+						@Html.LabelFor(m => m.Slug)
+						<div class="form-control">
+							@Html.TextBoxFor(m => m.Slug, new { placeholder = "Slug ismi.." })
+							@Html.ValidationMessageFor(m => m.Slug)
+							<small>Kategori isminin URL için oluşturulmuş halidir. Boş bırakılırsa sistem tarafından otomatik oluşturulacaktır. Tümü küçük harf, rakam ve - işareti içerebilir.</small>
+						</div>
+					</div>
+
+					<div class="form-item">
+						@Html.LabelFor(m => m.ParentID)
+						<div class="form-control">
+							@Html.DropDownListFor(m => m.ParentID, Model.Parents)
+							<small>Kategorileri hiyerarşik bir şekilde organize edebilirsiniz.</small>
+						</div>
+					</div>
+
+					<div class="form-item">
+						<div class="form-control align-right">
+							<input type="reset" value="İptal" class="btn btn-secondary" />
+							<input type="submit" value="Kategori Düzenle" class="btn btn-primary" />
+						</div>
+					</div>
+				}
+			</div>
+			<!--Update Form-->
+
+		</div>
+		<div class="right-container">
+			@{
+				Html.RenderAction("List", "Category", new { page = (int)ViewBag.currentPage });
+			}
+		</div>
+	</div>
+
+	<script>
+		$(document).ready(function () {
+			$('a.edit-link').click(function () {
+
+				$.ajax({
+					type: 'POST',
+					url: '/Category/CategoryEditData',
+					data: { 'id': $(this).data('id') },
+					contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+					success: function (data) {
+						//var result = JSON.parse(data);
+						var result = data;
+
+						if (result.Status) {
+							$('#update-form input[name=ID]').val(result.Data.ID);
+							$('#update-form input[name=Title]').val(result.Data.Title);
+							$('#update-form textarea[name=Description]').val(result.Data.Description);
+							$('#update-form input[name=Slug]').val(result.Data.Slug);
+							$('#update-form input[name=Icon]').val(result.Data.Icon);
+							$('#update-form input[name=Color]').val(result.Data.Color);
+							if (result.Data.ParentID > 0) {
+								$('#update-form select option[value="' + result.Data.ParentID + '"]').prop('selected', true);
+							} else {
+								$('#update-form select option[value=""]').prop('selected', true);
+							}
+							
+
+							$('#insert-form').hide();
+							$('#update-form').show();
+						} else {
+							$('#update-alert').removeClass('success').addClass('danger');
+							$('#update-alert .message').html(result.Message);
+
+							$('#update-alert').slideDown();
+						}
+					}
+				});
+
+
+			});
+
+			$('#update-form form').submit(function () {
+
+				$.ajax({
+					type: 'POST',
+					contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+					url: '@Url.Action("Edit", "Category")',
+					dataType: "text",
+					data: $('#update-form form').serialize(),
+					success: function (data) {
+						var result = JSON.parse(data);
+
+						if (result.status) {
+							$('#update-alert').removeClass('danger').addClass('success');
+						} else {
+							$('#update-alert').removeClass('success').addClass('danger');
+						}
+
+						$('#update-alert .message').html(result.message);
+
+						$('#update-alert').slideDown();
+					}
+				});
+
+				return false;
+			});
+
+			$('#update-form input[type=reset]').click(function () {
+				$('#update-form').hide();
+				$('#insert-form').show();
+			});
+
+			$('.delete-link').click(function () {
+				var id = $(this).data('id'), el = $(this).parent().parent();
+
+				var dialog = confirm("Kategoriyi silme istediğinizden emin misiniz?");
+
+				if (dialog == true) {
+					$.ajax({
+						type: 'GET',
+						contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+						url: '@Url.Action("Delete", "Category")',
+						data: {'id' : id},
+						success: function (data) {
+
+							if (data.status) {
+								$('#update-alert').removeClass('danger').addClass('success');
+								el.remove();
+							} else {
+								$('#update-alert').removeClass('success').addClass('danger');
+							}
+
+							$('#update-alert .message').html(data.message);
+							$('#update-alert').slideDown();
+						}
+					});
+				} else {
+					return false;
+				}
+			});
+
+			$('.ban-link').click(function () {
+				var id = $(this).data('id'), el = $(this);
+
+				$.ajax({
+					type: 'GET',
+					contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+					url: '@Url.Action("Block", "Category")',
+					data: {'id' : id},
+					success: function (data) {
+
+						if (data.status) {
+							$('#update-alert').removeClass('danger').addClass('success');
+							el.removeClass('ban').addClass('green');
+						} else {
+							$('#update-alert').removeClass('success').addClass('danger');
+							el.removeClass('green').addClass('ban');
+						}
+
+						$('#update-alert .message').html(data.message);
+						$('#update-alert').slideDown();
+					}
+				});
+			});
+		});
+
+	</script>
+</div>

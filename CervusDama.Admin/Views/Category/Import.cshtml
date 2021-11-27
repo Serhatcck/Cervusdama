@@ -1,0 +1,29 @@
+﻿
+@{
+	ViewBag.Title = "Kategori Aktar";
+	Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+<div class="header">
+	<div class="title"><i class="fa fa-sitemap fa-lg"></i>&nbsp;&nbsp;KATEGORİ AKTAR</div>
+</div>
+
+
+<div class="content">
+	@using (Html.BeginForm("Import", "Category", FormMethod.Post, new { enctype= "multipart/form-data" }))
+	{
+
+		<div class="form-item">
+			<label>Kaynak dosyayı seçin.</label>
+			<div class="form-control">
+				<input type="file" name="categoryFile" />
+			</div>
+		</div>
+
+		<div class="form-item">
+			<div class="form-control align-right">
+				<input type="submit" value="Kategori Aktar" class="btn btn-primary" />
+			</div>
+		</div>
+	}
+</div>

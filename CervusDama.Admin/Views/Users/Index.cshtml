@@ -1,0 +1,227 @@
+﻿@model IEnumerable<CervusDama.Data.Model.UserModel.UserListModel>
+@using CervusDama.Admin.Helpers
+@{
+	ViewBag.Title = "Kullanıcılar";
+	Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+<!--FeedBack Detail-->
+<div class="lightbox" id="feedBack-detail">
+	<div class="dialog-box">
+		<div class="top">
+			<div class="title"><i class="fa fa-user-tag"></i> Kullanıcı hesap detayları..</div>
+			<div class="close">
+				<a href="javascript:void(0)" onclick="$('#feedBack-detail').fadeOut()"><i class="fa fa-times"></i></a>
+			</div>
+		</div>
+		<div class="content" id="dialog-content">
+			<div class="user-detail-dialog-content">
+				<table class="user-table" id="user-info">
+					<tbody>
+						<tr>
+							<td colspan="3">Kişisel Bilgileri</td>
+						</tr>
+						<tr>
+							<td>ID</td>
+							<td class="seperator">:</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>Adı</td>
+							<td class="seperator">:</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>Soyadı</td>
+							<td class="seperator">:</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>Rolü</td>
+							<td class="seperator">:</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>Email Adresi</td>
+							<td class="seperator">:</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>Kullanıcı Adı</td>
+							<td class="seperator">:</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>Kayıt Tarihi</td>
+							<td class="seperator">:</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>Son Görülme</td>
+							<td class="seperator">:</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>Slug</td>
+							<td class="seperator">:</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>Durumu</td>
+							<td class="seperator">:</td>
+							<td></td>
+						</tr>
+					</tbody>
+				</table>
+				<table class="user-table" id="user-counter">
+					<tbody>
+						<tr>
+							<td colspan="3">Etkinlik Bilgileri</td>
+						</tr>
+						<tr>
+							<td>Eklediği makale</td>
+							<td class="seperator">:</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>Makale beğenileri</td>
+							<td class="seperator">:</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>Eklediği yorum</td>
+							<td class="seperator">:</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>Eklediği soru &amp; cevap</td>
+							<td class="seperator">:</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td>Eklediği kodlar</td>
+							<td class="seperator">:</td>
+							<td></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<div class="footer"></div>
+	</div>
+</div>
+<!--FeedBack Detail-->
+
+<div class="header">
+	<div class="title"><i class="fa fa-users fa-lg"></i>&nbsp;&nbsp;KULLANICILAR</div>
+</div>
+<div class="content">
+
+	<div class="alert" id="update-alert">
+		<div class="message"></div>
+		<div class="close"><i class="fa fa-times"></i></div>
+	</div>
+
+	<table class="data-table strip hovered">
+		<thead>
+			<tr>
+				<th class="check">#</th>
+				<th>İsim</th>
+				<th>Kullanıcı Adı</th>
+				<th>Rolü</th>
+				<th class="date">Son Giriş</th>
+				<th class="date">Kayıt Tarihi</th>
+				<th class="prc">Durum</th>
+				<th class="prc" colspan="2">İşlemler</th>
+			</tr>
+		</thead>
+		<tbody>
+
+			@foreach (var item in Model)
+			{
+				<tr>
+					<td class="center"><input type="checkbox" /></td>
+					<td>@item.FirstName @item.LastName</td>
+					<td>@item.NickName</td>
+					<td>@item.Role</td>
+					<td>@(item.LastLogin.HasValue ? item.LastLogin.Value.ToString("dd MMMM yyyy HH:mm") : "Bilgi Yok")</td>
+					<td>@item.CreateAt.ToString("dd MMMM yyyy HH:mm")</td>
+					<td class="center">@(item.Stauts == 1 ? "Aktif" : "Engelli")</td>
+					<td class="option">
+						<a href="javascript:void(0)" data-id="@item.ID" class="user-detail-link blue"><i class="fa fa-address-card"></i></a>
+					</td>
+					<td class="option">
+						<a href="javascript:void(0)" data-id="@item.ID" class="user-ban @(item.Stauts == 1 ? "green" : "ban")"><i class="fa fa-ban"></i></a>
+					</td>
+				</tr>
+			}
+		</tbody>
+		<tfoot>
+			<tr>
+				<td colspan="7">
+					@Html.Pager((int)ViewBag.currentPage, (int)ViewBag.totalData, "/kullanicilar")
+				</td>
+			</tr>
+		</tfoot>
+	</table>
+</div>
+
+<script>
+
+	$(document).ready(function () {
+		$('a.user-detail-link').click(function () {
+
+			var id = $(this).data('id');
+
+			$.ajax({
+				type: 'POST',
+				url: '/Users/UserDetailInfo',
+				data: { "id": id },
+				success: function (veri) {
+					if (veri.status) {
+						$('#user-info > tbody > tr:eq(1) td:eq(2)').text(veri.data.ID);
+						$('#user-info > tbody > tr:eq(2) td:eq(2)').text(veri.data.FirstName);
+						$('#user-info > tbody > tr:eq(3) td:eq(2)').text(veri.data.LastName);
+						$('#user-info > tbody > tr:eq(4) td:eq(2)').text(veri.data.RoleName);
+						$('#user-info > tbody > tr:eq(5) td:eq(2)').text(veri.data.Email);
+						$('#user-info > tbody > tr:eq(6) td:eq(2)').text(veri.data.NickName);
+						$('#user-info > tbody > tr:eq(7) td:eq(2)').text(veri.data.CreateAt);
+						$('#user-info > tbody > tr:eq(8) td:eq(2)').text(veri.data.LastLogin);
+						$('#user-info > tbody > tr:eq(9) td:eq(2)').text(veri.data.Slug);
+						$('#user-info > tbody > tr:eq(10) td:eq(2)').text((veri.data.Status == 1 ? 'Aktif' : 'Pasif'));
+
+						$('#user-counter > tbody > tr:eq(1) td:eq(2)').text(veri.data.ArticleCount);
+						$('#user-counter > tbody > tr:eq(2) td:eq(2)').html('<i class="fa fa-long-arrow-alt-up" style="color: #79b32f;"></i> ' + veri.data.ArticleLikeCount + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fa fa-long-arrow-alt-down" style="color: #d95b44;"></i> ' + veri.data.ArticleDisLikeCount);
+						$('#user-counter > tbody > tr:eq(3) td:eq(2)').text(veri.data.CommentCount);
+						$('#user-counter > tbody > tr:eq(4) td:eq(2)').text(veri.data.QuestionCount);
+						$('#user-counter > tbody > tr:eq(5) td:eq(2)').text(veri.data.CodeCount);
+
+						$('#feedBack-detail').fadeIn();
+					}
+				}
+			});
+		});
+
+		$('a.user-ban').click(function () {
+			var id = $(this).data('id');
+
+			$.ajax({
+				type: 'POST',
+				url: '/Users/UserBan',
+				data: { 'id': id },
+				success: function (data) {
+					if (data.status) {
+						$('#update-alert').removeClass('danger').addClass('success');
+					} else {
+						$('#update-alert').removeClass('success').addClass('danger');
+					}
+
+					$('#update-alert .message').html(data.message);
+
+					$('#update-alert').slideDown();
+				}
+			});
+		});
+	});
+
+</script>

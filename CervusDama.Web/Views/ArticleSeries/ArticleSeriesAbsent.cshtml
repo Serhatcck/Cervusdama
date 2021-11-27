@@ -1,0 +1,12 @@
+﻿@{
+	ViewBag.Title = "Makale Serisi Bulunamadı";
+	Layout = "~/Views/Shared/_ErrorLayout.cshtml";
+}
+
+
+<div class="error-container">
+	<h1>Bu bir hata değil!</h1>
+	<p>Yalnız görüntülemek istediğin makale serisini bulamadık ya da böyle bir makale serisi hiç olmadı..</p>
+	<p>Makale seri listesine <a href="@Url.RouteUrl("ArticleSeries")">geri dön.</a></p>
+	<img src="~/Content/images/error.png" />
+</div>

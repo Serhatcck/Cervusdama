@@ -1,0 +1,201 @@
+﻿<!DOCTYPE html>
+
+<html lang="tr">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="icon" href="~/Content/images/favicon.ico" type="image/x-icon" />
+	<link href="~/Content/third-party/font-awesome/css/fontawesome.min.css" rel="stylesheet" />
+	<link href="~/Content/third-party/font-awesome/css/solid.min.css" rel="stylesheet" />
+	<link href="~/Content/third-party/flaticons/css/flaticon.css" rel="stylesheet" />
+	<link href="~/Content/style/site.css" rel="stylesheet" />
+	<script src="~/Content/script/jquery-3.4.1.min.js"></script>
+	<script src="~/Content/third-party/sortable/Sortable.js"></script>
+	<script src="~/Content/script/script.js"></script>
+	<title>Cervus Dama | @ViewBag.Title</title>
+</head>
+<body>
+
+	<header>
+		<div class="menu-wrap">
+			<div class="left-wrap">
+				<div class="logo">CervusDama</div>
+				<ul class="menu">
+					<li>
+						<a href="@Url.RouteUrl("ArticleInsert")"><i class="fa fa-plus"></i> Yazı Ekle</a>
+					</li>
+					<li>
+						<a href="@Url.RouteUrl("Upload")"><i class="fa fa-upload"></i> Medya Yükle</a>
+					</li>
+				</ul>
+			</div>
+			<div class="right-wrap">
+
+				<div class="site-menu">
+					<div class="site-menu-item">
+						<a href="javascript:void(0)" data-menu="dropdown" data-target="#search-menu" class="dropbtn">
+							<i class="fa fa-search dropbtn"></i>
+						</a>
+
+						<div class="system-menu-wrap search-opt" id="search-menu">
+							<input type="text" placeholder="Yazı, &commat;Kullanıcı, #Etiket, >Kategori, ?Soru Arama.." class="search-input" />
+						</div>
+					</div>
+
+					<div class="site-menu-item">
+						<a href="javascript:void(0)">
+							<div class="info-circle">5</div>
+							<i class="fa fa-compass"></i>
+						</a>
+					</div>
+
+					<div class="site-menu-item">
+						<a href="javascript:void(0)">
+							<div class="info-circle">9+</div>
+							<i class="fa fa-comment-alt"></i>
+						</a>
+					</div>
+
+					<div class="site-menu-item">
+						<a href="javascript:void(0)" data-menu="dropdown" data-target="#system-menu" class="dropbtn">
+							<i class="fa fa-bars dropbtn"></i>
+						</a>
+
+						<div class="system-menu-wrap" id="system-menu">
+							<h3>Sistem Menüsü</h3>
+							<ul>
+								<li>
+									<a href="@Url.RouteUrl("Profile")"><i class="fa fa-user"></i>&nbsp;&nbsp;Profil</a>
+								</li>
+								<li>
+									<a href="@Url.RouteUrl("Roles")"><i class="fa fa-user-tag"></i>&nbsp;&nbsp;Kullanıcı Rolleri</a>
+								</li>
+								<li>
+									<a href="@Url.RouteUrl("FeedBack")"><i class="fa fa-comments-dollar"></i>&nbsp;&nbsp;Geri Bildirimler</a>
+								</li>
+								<li>
+									<a href="@Url.RouteUrl("LogOut")" class="red"><i class="fa fa-power-off"></i>&nbsp;&nbsp;Çıkış</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+
+				@*<span href="javascript:void(0)" class="system-menu">
+						<i class="fa fa-search"></i>
+						<div class="admin-search">
+							<input type="text" placeholder="#etiket, &commat;kullanıcı, >Kategori, ?Soru Ara.." />
+						</div>
+					</span>
+
+					<a href="javascript:void(0)" class="system-menu" data-prc="dropdown" data-target="sub-menu">
+						<i class="fa fa-compass"></i>
+						<div class="info-circle">9+</div>
+					</a>
+
+					<a href="javascript:void(0)" class="system-menu" data-prc="dropdown" data-target="com-menu">
+						<i class="fa fa-comment-alt"></i>
+						<div class="info-circle">5</div>
+					</a>
+
+					<a href="javascript:void(0)" class="system-menu" data-prc="dropdown" data-target="system-menu">
+						<i class="fa fa-bars"></i>
+					</a>
+					<div class="system-menu-wrap" id="system-menu">
+						<ul>
+							<li>
+								<a href="@Url.RouteUrl("Profile")"><i class="fa fa-user"></i>&nbsp;&nbsp;Profil</a>
+							</li>
+							<li>
+								<a href="@Url.RouteUrl("Roles")"><i class="fa fa-user-tag"></i>&nbsp;&nbsp;Kullanıcı Rolleri</a>
+							</li>
+							<li>
+								<a href="@Url.RouteUrl("FeedBack")"><i class="fa fa-comments-dollar"></i>&nbsp;&nbsp;Geri Bildirimler</a>
+							</li>
+							<li>
+								<a href="@Url.RouteUrl("LogOut")"><i class="fa fa-power-off"></i>&nbsp;&nbsp;Çıkış</a>
+							</li>
+						</ul>
+					</div>
+				*@
+			</div>
+		</div>
+	</header>
+
+	<nav>
+		<ul class="nav-menu">
+			<li>
+				<a href="@Url.RouteUrl("Dashboard")">
+					<i class="fa fa-tachometer-alt fa-lg"></i>
+					<br />
+					<span>ANASAYFA</span>
+				</a>
+			</li>
+			<li>
+				<a href="@Url.RouteUrl("Articles")">
+					<i class="fa fa-signature fa-lg"></i>
+					<br />
+					<span>YAZILAR</span>
+				</a>
+			</li>
+			<li>
+				<a href="@Url.RouteUrl("ArticleSeries")">
+					<i class="fa fa-mail-bulk fa-lg"></i>
+					<br />
+					<span>SERİ YAZI</span>
+				</a>
+			</li>
+			<li>
+				<a href="@Url.RouteUrl("Users")">
+					<i class="fa fa-users fa-lg"></i>
+					<br />
+					<span>KULLANICI</span>
+				</a>
+			</li>
+			<li>
+				<a href="@Url.RouteUrl("Categories")">
+					<i class="fa fa-sitemap fa-lg"></i>
+					<br />
+					<span>KATEGORİ</span>
+				</a>
+			</li>
+			<li>
+				<a href="@Url.RouteUrl("Tickets")">
+					<i class="fa fa-ticket-alt fa-lg"></i>
+					<br />
+					<span>ETİKET</span>
+				</a>
+			</li>
+			<li>
+				<a href="@Url.RouteUrl("Media")">
+					<i class="fa fa-image fa-lg"></i>
+					<br />
+					<span>MEDYA</span>
+				</a>
+			</li>
+			<li>
+				<a href="@Url.RouteUrl("Questions")">
+					<i class="fa fa-question fa-lg"></i>
+					<br />
+					<span>SORU / CEVAP</span>
+				</a>
+			</li>
+			<li>
+				<a href="@Url.RouteUrl("CodeLibrary")">
+					<i class="fa fa-file-code fa-lg"></i>
+					<br />
+					<span>KÜTÜPHANE</span>
+				</a>
+			</li>
+		</ul>
+	</nav>
+
+	<section>
+		@RenderBody()
+	</section>
+	<footer>
+		Copyright &copy; 2020 CervusDama
+	</footer>
+
+</body>
+</html>

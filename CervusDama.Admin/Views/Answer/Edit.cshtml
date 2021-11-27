@@ -1,0 +1,67 @@
+﻿@model CervusDama.Data.Model.AnswerModel.AnswerEditModel
+@{
+	ViewBag.Title = "Cevap Düzenle";
+	Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+
+<div class="header">
+	<div class="title"><i class="fa fa-file-alt fa-lg"></i>&nbsp;&nbsp;Cevap Düzenle</div>
+</div>
+<div class="content">
+
+	<div class="alert" id="alert">
+		<div class="message"></div>
+		<div class="close"><i class="fa fa-times"></i></div>
+	</div>
+
+	@using (Html.BeginForm("Edit", "answer", FormMethod.Post, new { id = "answer-form" }))
+	{
+		@Html.HiddenFor(m => m.ID)
+
+		<div class="split-container">
+			<div class="editor-left">
+				<div class="form">
+					<form>
+						<div class="form-item">
+							<div class="form-control">
+								@Html.TextAreaFor(m => m.Content)
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+			<div class="editor-right">
+				<button type="submit" class="btn btn-primary" id="save-btn" style="float:right;">Kaydet</button>
+			</div>
+		</div>
+	}
+</div>
+
+<script>
+
+	$(document).ready(function () {
+		$('#answer-form').submit(function (e) {
+			e.preventDefault();
+			$.ajax({
+				type: 'POST',
+				url: '/Answer/Edit',
+				data: $(this).serialize(),
+				success: function (data) {
+					if (data.status) {
+						$('#alert').removeClass('danger').addClass('success');
+					} else {
+						$('#alert').removeClass('success').addClass('danger');
+					}
+
+					$('#alert .message').html(data.message);
+
+					$('#alert').slideDown();
+				}
+			});
+		});
+
+		return false;
+	});
+
+</script>

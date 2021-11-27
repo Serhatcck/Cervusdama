@@ -1,0 +1,155 @@
+﻿@model CervusDama.Data.Model.ArticleModel.ArticleDetailModel
+@{
+	ViewBag.Title = Model.Title;
+	Layout = "~/Views/Shared/_MainLayouth.cshtml";
+}
+
+<!--Read Mode-->
+<div class="modal" id="read-box">
+	<div class="read-menu">
+		<div class="menu-item">
+			<a href="javascript:void(0)" id="night">Karanlık Mod</a>
+		</div>
+		<div class="menu-item">
+			<input type="range" value="16" min="16" max="46" step="5" id="ptc" />
+			<span id="pt-vw">16px</span>
+		</div>
+	</div>
+	<div class="modal-content" style="width:97%; margin:50px auto; max-height:80vh;">
+		<div class="modal-top">
+			<div class="title">@Model.Title</div>
+			<div class="close"><i class="cdi cdi-no-alt"></i></div>
+		</div>
+		<div class="modal-body read-mode-modal">
+			<!--Article Content-->
+			@Html.Raw(Model.Content)
+			<!--Article Content-->
+		</div>
+		<div class="modal-footer"></div>
+	</div>
+</div>
+<!--Read Mode-->
+
+<div class="page-container blog-detail">
+	<!--İçindekiler-->
+	<div class="content-table">
+		<ul id="content-table">
+			<li>İçindekiler</li>
+		</ul>
+	</div>
+	<!--İçindekiler-->
+
+	<h1 class="page-title">@Model.Title</h1>
+	<div class="article-info">
+		<div><a href="@Url.RouteUrl("UserProfile", new { slug = Model.UserInfo.Slug })" class="author-link">@Model.UserInfo.FirstName @Model.UserInfo.LastName</a></div>
+		<div>Yayın Tarihi : @Model.CreateAt.ToString("dd MMMM yyyy") <small>@Model.CreateAt.ToString("HH:mm")</small></div>
+		<div id="okuma-suresi"></div>
+		<div>@Model.Hit Okunma</div>
+		<div><a href="javascript:void(0)" data-target="read-box" data-trigger="modal"><i class="cdi cdi-fullscreen-alt"></i></a></div>
+	</div>
+	<article>
+		@Html.Raw(Model.Content)
+	</article>
+	@Html.HiddenFor(m => m.ID, new { id = "article-id" })
+	<div class="article-footer">
+		<div class="vote-menu">
+			<div class="vote-item">
+				<a href="javascript:void(0)" class="like" id="like-btn">
+					<i class="cdi cdi-arrow-up-alt2"></i>
+				</a>
+				<span class="like" id="like-counter">@Model.LikeCount</span>
+			</div>
+			<div class="vote-item">
+				<a href="javascript:void(0)" class="dislike" id="dislike-btn">
+					<i class="cdi cdi-arrow-down-alt2"></i>
+				</a>
+				<span class="dislike" id="dislike-counter">@Model.DisLikeCount</span>
+			</div>
+		</div>
+
+		<ul class="article-tickets">
+			@foreach (var item in Model.Tickets)
+			{
+				<li><a href="@Url.RouteUrl("TicketDetail", new { slug = item.Slug })">@item.Title</a></li>
+			}
+		</ul>
+	</div>
+
+	<h2 class="page-title">Makale Yorumları</h2>
+
+	<div class="article-comment">
+
+		@if (Model.Comments.Count > 0)
+		{
+
+			foreach (var item in Model.Comments)
+			{
+				<div class="comment-box">
+					<div class="profile-img">
+						<img src="~/uploads/profile/@(item.UserInfo.Slug).png" />
+					</div>
+					<div class="comment-content">
+						<div class="user-info-bar">
+							<div class="user-link">
+								<a href="@Url.RouteUrl("UserProfile", new { slug = item.UserInfo.Slug })">@item.UserInfo.FirstName @item.UserInfo.LastName</a>
+							</div>
+							<div class="comment-date">
+								@item.CreateAt.ToString("dd MMMM yyyy") <small>@item.CreateAt.ToString("HH:mm")</small>
+							</div>
+						</div>
+						<div class="comment-text">
+							@Html.Raw(item.Content)
+						</div>
+						<div class="comment-footer">
+							<div class="vote-item">
+								<a href="javascript:void(0)" class="like" data-action="like" data-id="@item.ID">
+									<i class="cdi cdi-arrow-up-alt2"></i>
+								</a>
+								<span class="like like-val">@item.LikeCount</span>
+							</div>
+							<div class="vote-item">
+								<a href="javascript:void(0)" class="dislike" data-action="dislike" data-id="@item.ID">
+									<i class="cdi cdi-arrow-down-alt2"></i>
+								</a>
+								<span class="dislike dlike-val">@item.DisLikeCount</span>
+							</div>
+
+							@if (User.Identity.IsAuthenticated)
+							{
+								if (int.Parse(User.Identity.Name) == item.UserInfo.ID)
+								{
+									<div class="comment-menu">
+										<ul>
+											<li>
+												<a href="javascript:void(0)" class="edit" data-id="@item.ID" data-action="edit"><i class="cdi cdi-edit"></i></a>
+											</li>
+											<li>
+												<a href="javascript:void(0)" class="delete" data-id="@item.ID" data-action="delete"><i class="cdi cdi-trash"></i></a>
+											</li>
+										</ul>
+									</div>
+								}
+							}
+
+						</div>
+					</div>
+				</div>
+			}
+		}
+		else
+		{
+			<div class="no-content">Henüz yorum eklenmemiş.</div>
+		}
+	</div>
+
+	<h2 class="page-title" id="comment-title">Yorum Gönder</h2>
+
+	@{
+		Html.RenderAction("InsertArticleComment", "Comment", new { slug = Model.Slug, articleID = Model.ID });
+
+		Html.RenderAction("EditArticleComment", "Comment", new { slug = Model.Slug, articleID = Model.ID });
+	}
+
+</div>
+<input type="hidden" value="" id="comment-id" />
+<script src="~/Content/script/article-detial.js"></script>

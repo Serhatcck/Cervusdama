@@ -1,0 +1,177 @@
+﻿@model CervusDama.Data.Model.UserModel.UserListModel
+@{
+	ViewBag.Title = "Profil Ayarları";
+	Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+<div class="header">
+	<div class="title"><i class="fa fa-user-cog fa-lg"></i>&nbsp;&nbsp;PROFİL AYARLARI</div>
+</div>
+<div class="content">
+
+	<div class="alert" id="alert">
+		<div class="message"></div>
+		<div class="close"><i class="fa fa-times"></i></div>
+	</div>
+
+	<div class="split-container">
+		<!--Sol içerik-->
+		<div class="card-left">
+			<div class="card">
+				<div class="card-title"><i class="fa fa-user" style="color:#0088cc"></i>&nbsp;&nbsp;Profil Bilgileri</div>
+				<div class="card-content">
+					<div class="form">
+
+						@using (Html.BeginForm("EditUserInfo", "Profile", FormMethod.Post, new { id = "edit-form" }))
+						{
+							<!--Form control-->
+							<div class="form-item">
+								<label>İsim</label>
+								<div class="form-control">
+									<input type="text" placeholder="İsminiz.." name="FirstName" value="@Model.FirstName" />
+								</div>
+							</div>
+							<!--Form control-->
+							<!--Form control-->
+							<div class="form-item">
+								<label>Soyisim</label>
+								<div class="form-control">
+									<input type="text" placeholder="Soyisminiz.." name="LastName" value="@Model.LastName" />
+								</div>
+							</div>
+							<!--Form control-->
+							<!--Form control-->
+							<div class="form-item">
+								<label>Kullanıcı Adı (Nickname)</label>
+								<div class="form-control">
+									<input type="text" placeholder="Kullanıcı adı.." name="NickName" value="@Model.NickName" />
+								</div>
+							</div>
+							<!--Form control-->
+							<!--Form control-->
+							<div class="form-item">
+								<label>Email Adresi</label>
+								<div class="form-control">
+									<input type="text" placeholder="Email Adresi.." name="Email" value="@Model.Email" />
+								</div>
+							</div>
+							<!--Form control-->
+							<!--Form control-->
+							<div class="form-item">
+								<label>Kayıt Tarihi</label>
+								<div class="form-control">
+									<input type="text" disabled value="@Model.CreateAt.ToString("dd MMMM yyyy HH:mm")" />
+								</div>
+							</div>
+							<!--Form control-->
+							<!--Form control-->
+							<div class="form-item">
+								<label>Slug</label>
+								<div class="form-control">
+									<input type="text" disabled value="@Model.Slug" />
+								</div>
+							</div>
+							<!--Form control-->
+
+							<div class="form-item">
+								<div class="form-control align-right">
+									<input type="submit" value="Bilgileri Güncelle" class="btn btn-primary" />
+								</div>
+							</div>
+						}
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--Sol içerik-->
+		<!--Sağ içerik-->
+		<div class="card-right">
+			<div class="card">
+				<div class="card-title"><i class="fa fa-lock" style="color:#f0ad4e"></i>&nbsp;&nbsp;Oturum Bilgileri</div>
+				<div class="card-content">
+					<div class="form">
+
+						@using (Html.BeginForm("ChangePassword", "Profile", FormMethod.Post, new { id = "password-form" }))
+						{
+							<!--Form control-->
+							<div class="form-item">
+								<label>Geçerli Şifre</label>
+								<div class="form-control">
+									<input type="password" placeholder="Geçerli şifre.." name="OldPassword" />
+								</div>
+							</div>
+							<!--Form control-->
+							<!--Form control-->
+							<div class="form-item">
+								<label>Yeni Şifre</label>
+								<div class="form-control">
+									<input type="password" placeholder="Yeni şifre.." name="Password" />
+								</div>
+							</div>
+							<!--Form control-->
+							<!--Form control-->
+							<div class="form-item">
+								<label>Yeni Şifre Tekrar</label>
+								<div class="form-control">
+									<input type="password" placeholder="Yeni şifre tekrar.." name="RePassword" />
+								</div>
+							</div>
+							<!--Form control-->
+
+							<div class="form-item">
+								<div class="form-control align-right">
+									<input type="submit" value="Şifre Değiştir" class="btn btn-primary" name="form-btn" />
+								</div>
+							</div>
+						}
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--Sağ içerik-->
+	</div>
+</div>
+
+<script>
+	$(document).ready(function () {
+		$('#edit-form').submit(function (e) {
+			e.preventDefault();
+
+			$.ajax({
+				type: 'POST',
+				url: $(this).attr('action'),
+				data: $(this).serialize(),
+				success: function (data) {
+					if (data.status) {
+						$('#alert').removeClass('danger').addClass('success');
+					} else {
+						$('#alert').removeClass('success').addClass('danger');
+					}
+
+					$('#alert .message').html(data.message);
+					$('#alert').slideDown();
+				}
+			});
+		});
+
+		$('#password-form').submit(function (e) {
+			e.preventDefault();
+
+			$.ajax({
+				type: 'POST',
+				url: $(this).attr('action'),
+				data: $(this).serialize(),
+				success: function (data) {
+					if (data.status) {
+						$('#alert').removeClass('danger').addClass('success');
+					} else {
+						$('#alert').removeClass('success').addClass('danger');
+					}
+
+					$('#alert .message').html(data.message);
+					$('#alert').slideDown();
+				}
+			});
+		});
+	});
+</script>

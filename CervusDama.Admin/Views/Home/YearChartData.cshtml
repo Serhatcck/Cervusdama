@@ -1,0 +1,93 @@
+﻿
+
+<script>
+	window.onload = function () {
+
+		var chart_data = [{
+			name: "Üye Verileri",
+			type: "spline",
+			//color:"#0088CC",
+			yValueFormatString: "#0.## Adet",
+			showInLegend: true,
+			dataPoints: [
+				{ x: new Date(2020, 01), y: 31 },
+				{ x: new Date(2020, 02), y: 31 },
+				{ x: new Date(2020, 03), y: 29 },
+				{ x: new Date(2020, 04), y: 29 },
+				{ x: new Date(2020, 05), y: 31 },
+				{ x: new Date(2020, 06), y: 30 },
+				{ x: new Date(2020, 07), y: 29 }
+			]
+		},
+		{
+			name: "Makale Verileri",
+			type: "spline",
+			yValueFormatString: "#0.## Adet",
+			showInLegend: true,
+			dataPoints: [
+				{ x: new Date(2020, 01), y: 20 },
+				{ x: new Date(2020, 02), y: 20 },
+				{ x: new Date(2020, 03), y: 25 },
+				{ x: new Date(2020, 04), y: 25 },
+				{ x: new Date(2020, 05), y: 25 },
+				{ x: new Date(2020, 06), y: 25 },
+				{ x: new Date(2020, 07), y: 25 }
+			]
+		},
+		{
+			name: "Soru & Cevap Verileri",
+			type: "spline",
+			yValueFormatString: "#0.## Adet",
+			showInLegend: true,
+			dataPoints: [
+				{ x: new Date(2020, 01), y: 22 },
+				{ x: new Date(2020, 02), y: 19 },
+				{ x: new Date(2020, 03), y: 23 },
+				{ x: new Date(2020, 04), y: 24 },
+				{ x: new Date(2020, 05), y: 24 },
+				{ x: new Date(2020, 06), y: 23 },
+				{ x: new Date(2020, 07), y: 23 }
+			]
+		}];
+
+		var chart = new CanvasJS.Chart("chartContainer", {
+			animationEnabled: true,
+			theme: "light2",    // "light1", "dark1", "dark2"
+			/*title: {
+				text: "Tüm zamanların sayısal verileri."
+			},*/
+			legend: {
+				fontSize: 16,
+				fontColor: "red"
+			},
+			axisX: {
+				valueFormatString: "MMM YY"
+			},
+			axisY: {
+				title: "Sayısal Değerler",
+				gridColor: "#e0e0e0"
+			},
+			legend: {
+				cursor: "pointer",
+				fontSize: 16,
+				itemclick: toggleDataSeries
+			},
+			toolTip: {
+				shared: true
+			},
+			data: chart_data
+		});
+		chart.render();
+
+		function toggleDataSeries(e) {
+			if (typeof (e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+				e.dataSeries.visible = false;
+			}
+			else {
+				e.dataSeries.visible = true;
+			}
+			chart.render();
+		}
+	}
+</script>
+

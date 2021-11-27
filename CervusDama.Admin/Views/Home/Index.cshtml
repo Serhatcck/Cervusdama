@@ -1,0 +1,58 @@
+﻿@model CervusDama.Data.Model.UserModel.LoginModel
+@{
+	ViewBag.Title = "Yönetim Paneli Giriş";
+	Layout = "~/Views/Shared/_LoginLayout.cshtml";
+}
+
+<div class="login-wrap">
+	<div class="login-form">
+
+		<div class="content-block">
+			<h1><span style="color:#8eb943">CERVUS</span> <span style="color:#d14130">DAMA</span></h1>
+			<small>Sisteme tanımlı, Email adresi ve Şifreniz ile<br />yönetim paneline giriş yapınız.</small>
+		</div>
+
+		@*Crypto.HashPassword("12345678")*@
+
+		@using (Html.BeginForm("Index", "Home", FormMethod.Post))
+		{
+			<div class="form-item">
+				<label for="email">Email Adresi</label>
+				<div class="form-control">
+					@Html.TextBoxFor(m => m.Email, new { placeholder = "Email adresinizi girin." })
+				</div>
+			</div>
+
+			<div class="form-item">
+				<label for="sifre">Şifre</label>
+				<div class="form-control">
+					@Html.PasswordFor(m => m.Password, new { placeholder = "Şifrenizi girin." })
+				</div>
+			</div>
+
+			<div class="form-item">
+				<div class="form-control">
+					<label>
+						<input type="checkbox" name="rem" />&nbsp;&nbsp;Beni hatırla.
+					</label>
+				</div>
+			</div>
+
+			<div class="form-item">
+				<div class="form-control center">
+					<button type="submit" class="btn btn-blue btn-large">Giriş Yap</button>
+				</div>
+			</div>
+		}
+
+		<div class="login-message">@Html.ValidationMessage("error")</div>
+
+	</div>
+
+	<div class="content-block">
+		<a href="#">Şifremi Unuttum</a>
+	</div>
+	<div class="copy-text">
+		2020 &copy; Cervus Dama
+	</div>
+</div>

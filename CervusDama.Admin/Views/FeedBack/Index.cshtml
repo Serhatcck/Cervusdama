@@ -1,0 +1,167 @@
+﻿@model IEnumerable<CervusDama.Data.Model.FeedBackModel.FeedBackListModel>
+@using CervusDama.Admin.Helpers
+@{
+	ViewBag.Title = "Geri Bildirimler";
+	Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+<!--FeedBack Detail-->
+<div class="lightbox" id="feedBack-detail">
+	<div class="dialog-box">
+		<div class="top">
+			<div class="title"><i class="fa fa-comment"></i> Geri bildirim detayı..</div>
+			<div class="close">
+				<a href="javascript:void(0)" onclick="$('#feedBack-detail').fadeOut()"><i class="fa fa-times"></i></a>
+			</div>
+		</div>
+		<div class="content" id="dialog-content">
+			<h3>Geribildirim detayları</h3>
+			<table class="user-table" id="detail-table">
+				<tbody>
+					<tr>
+						<td>ID</td>
+						<td>:</td>
+						<td></td>
+					</tr>
+					<tr>
+						<td>Gönderen</td>
+						<td>:</td>
+						<td></td>
+					</tr>
+					<tr>
+						<td>Gönderim tarihi</td>
+						<td>:</td>
+						<td></td>
+					</tr>
+					<tr>
+						<td>Konu</td>
+						<td>:</td>
+						<td></td>
+					</tr>
+				</tbody>
+			</table>
+			<h3>Mesaj:</h3>
+			<div id="feedback-content" class="text-content"></div>
+		</div>
+		<div class="footer"></div>
+	</div>
+</div>
+<!--FeedBack Detail-->
+
+<div class="header">
+	<div class="title"><i class="fa fa-comments-dollar fa-lg"></i>&nbsp;&nbsp;Kullanıcı Geri Bildirimleri</div>
+</div>
+<div class="content">
+
+	<div class="alert" id="alert">
+		<div class="message"></div>
+		<div class="close"><i class="fa fa-times"></i></div>
+	</div>
+
+	<table class="data-table strip hovered">
+		<thead>
+			<tr>
+				<th class="check">#</th>
+				<th>Gönderim Amacı</th>
+				<th>Tarih</th>
+				<th class="prc">Durum</th>
+				<th class="prc" colspan="2">İşlemler</th>
+			</tr>
+		</thead>
+		<tbody>
+
+			@foreach (var item in Model)
+			{
+				<tr>
+					<td id="data_@item.ID">
+					@item.ID
+						<input type="hidden" value="@item.Content" />
+					</td>
+					<td>@item.FeedBackTypeText</td>
+					<td>@item.CreateAt.ToString("dd MMMM yyyy HH:mm")</td>
+					<td class="center">@(item.Status == 1 ? "Okundu.." : "Okunmadı..")</td>
+					<td class="option">
+						<a href="javascript:void(0)" data-id="@item.ID" class="blue"><i class="fa fa-bars"></i></a>
+					</td>
+					<td class="option">
+						<a href="javascript:void(0)" onclick="deleteFeedBack(@item.ID)" class="red"><i class="fa fa-times"></i></a>
+					</td>
+				</tr>
+			}
+		</tbody>
+		<tfoot>
+			<tr>
+				<td colspan="6">
+					@Html.Pager((int)ViewBag.currentPage, (int)ViewBag.totalData, "/geri-bildirimler")
+				</td>
+			</tr>
+		</tfoot>
+	</table>
+
+</div>
+
+<script>
+	$(document).ready(function () {
+		$('a[data-id]').click(function () {
+
+			var id = $(this).data('id');
+
+			$.ajax({
+				type: 'POST',
+				url: '/FeedBack/FeedbackDetail',
+				data: { 'id': id },
+				success: function (result) {
+					if (result.status) {
+						var sender = '';
+						if (result.data.SenderType) {
+							sender = result.data.FirstName + ' ' + result.data.LastName;
+						} else {
+							sender = 'Anonim';
+						}
+
+						$('#detail-table > tbody > tr:eq(0) > td:eq(2)').html(result.data.ID);
+						$('#detail-table > tbody > tr:eq(1) > td:eq(2)').html(sender);
+						$('#detail-table > tbody > tr:eq(2) > td:eq(2)').html(result.data.CreateAt);
+						$('#detail-table > tbody > tr:eq(3) > td:eq(2)').html(result.data.Title);
+						$('#feedback-content').html(result.data.Content);
+
+						$('#feedBack-detail').fadeIn();
+						
+					} else {
+						$('#alert .message').html(result.message);
+						$('#alert').addClass('danger');
+						$('#alert').fadeIn();
+					}
+				}
+			});
+		});
+	});
+
+	function deleteFeedBack(id) {
+		var result = confirm("Bildirimi silmek istediğinizden emin misiniz? Bu işlem geri alınamaz!!");
+
+		if (result == true) {
+			$.ajax({
+				type: 'POST',
+				url: '@Url.Action("Delete", "FeedBack")',
+				data: { 'id': id },
+				success: function (data) {
+
+					$('#alert .message').html(data.message);
+
+					if (data.status) {
+						$('#alert').addClass('success');
+					} else {
+						$('#alert').addClass('danger');
+					}
+
+					$('#alert').fadeIn();
+
+					$('#data_' + id).closest('tr').remove();
+				}
+			});
+		}
+
+		return false;
+	}
+</script>

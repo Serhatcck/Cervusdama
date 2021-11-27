@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cervus Dama | Yeni üye bilgi mesajı</title>
+    <style>
+        body{
+            background:#f8f8f8;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size:14px;
+        }
+
+        a{
+            color:#0088cc;
+            text-decoration: none;
+        }
+
+        a:hover{
+            color:#016087;
+            text-decoration: underline;
+        }
+
+        .content{
+            width:750px;
+            margin:50px auto;
+            box-sizing: border-box;
+        }
+
+        .mail-top{
+            width:100%;
+            padding:10px;
+            box-sizing: border-box;
+            background:#0088cc;
+            color:#FFF;
+            font-size:18px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            text-align: center;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+        }
+
+        .mail-bottom{
+            width:100%;
+            padding:10px;
+            box-sizing: border-box;
+            background:#0088cc;
+            color:#FFF;
+            font-size:14px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            border-bottom-left-radius: 8px;
+            border-bottom-right-radius: 8px;
+        }
+
+        .mail-body{
+            width:100%;
+            background:url(https://i.hizliresim.com/KlbxYv.png) no-repeat center center #FFF;
+            box-sizing: border-box;
+            border-left:1px solid #e8e8e8;
+            border-right:1px solid #e8e8e8;
+            padding:20px 0;
+        }
+
+        .mail-body .content-item{
+            display: block;
+            box-sizing: border-box;
+            padding:30px 50px;
+            font-size:16px;
+            line-height: 28px;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .btn{
+            padding:10px 25px;
+            text-align: center;
+            border:none;
+            background:#0088cc;
+            color:#FFFFFF !important;
+            font-size:100%;
+            border-radius: 3px;
+            display: inline-block;
+            margin-top:40px;
+            text-decoration: none;
+            line-height: 20px;
+        }
+
+        .btn:hover{
+            background: #016087;
+            color:#FFF;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    
+    <div class="content">
+        <div class="mail-top">
+            Cervus Dama Üyelik Bilgileri
+        </div>
+        <div class="mail-body">
+            <div class="content-item">
+                Merhabalar, {nameSurname}!<br/>
+                Cervus Dama platformuna hoşgeldiniz..<br/>
+                Sizleri aramızda görmekten çok mutluyuz. Cervus Dama sizin katkılarınız ile büyüyecek.
+            </div>
+            <div class="content-item text-center">
+                Üyeliğinizi tamamlamak için aşağıdaki bağlantıya tıklayarak Cervus Dama hesabınızı aktif hale getiriniz.<br/>Hesabınızı onayladıktan sonra Cervus Dama üzerinde paylaşım yapmaya başlayabilirsiniz.
+                <br/><br/>
+                <a href="{link}" class="btn">Hesabınızı Onaylayın</a>
+            </div>
+            <div class="content-item">
+                Lütfen cervusdama.com <a href="#">kurallarımızı</a> ve <a href="#">kullanıcı sözleşmesini</a> okuyunuz..
+            </div>
+        </div>
+        <div class="mail-bottom">
+            Cervus Dama &copy; 2020
+        </div>
+    </div>
+
+</body>
+</html>

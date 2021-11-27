@@ -1,0 +1,11 @@
+﻿@{
+	ViewBag.Title = "Kullanıcı profili bulunamadı";
+	Layout = "~/Views/Shared/_ErrorLayout.cshtml";
+}
+
+<div class="error-container">
+	<h1>Bu bir hata değil!</h1>
+	<p>Yalnız görüntülemek istediğin kullanıcı profilini bulamadık ya da böyle bir kullanıcı hiç olmadı..</p>
+	<p>Cervus Dama ana sayfasına <a href="@Url.RouteUrl("Articles")">geri dön.</a></p>
+	<img src="~/Content/images/error.png" />
+</div>

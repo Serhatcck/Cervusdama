@@ -1,0 +1,256 @@
+﻿@model CervusDama.Data.Model.QuestionModel.QuestionEditModel
+@{
+    ViewBag.Title = "Soru & Cevap | " + Model.Title;
+    Layout = "~/Views/Shared/_MainLayouth.cshtml";
+}
+
+<div class="page-container">
+    <h1 class="page-title">
+        @Model.Title
+        <a href="@Url.RouteUrl("Questions")" style="float:right; font-size:16px;"><i class="cdi cdi-undo"></i> Sorulara Dön</a>
+    </h1>
+
+    <!--Code Insert-->
+    <div class="modal" id="cd-editor-code">
+        <div class="modal-content">
+            <div class="modal-top">
+                <div class="title"><i class="cdi cdi-editor-code"></i>&nbsp;&nbsp;Kod Ekle</div>
+                <div class="close"><i class="cdi cdi-no-alt"></i></div>
+            </div>
+            <div class="modal-body">
+                <div class="form-item">
+                    <div class="form-control">
+                        <select name="language">
+                            <option value="">Kod hangi dilde?</option>
+                            <option value="language-c">C</option>
+                            <option value="language-cpp">C++</option>
+                            <option value="language-cs">C#</option>
+                            <option value="language-java">Java</option>
+                            <option value="language-php">PHP</option>
+                            <option value="language-python">Python</option>
+                            <option value="language-javascript">Javascript</option>
+                            <option value="language-html">HTML</option>
+                            <option value="language-css">CSS</option>
+                            <option value="language-json">JSON</option>
+                            <option value="language-prolog">Prolog</option>
+                            <option value="language-bash">Bash</option>
+                            <option value="language-aspnet">ASP.Net</option>
+                            <option value="language-go">Go Lang</option>
+                            <option value="language-sql">SQL</option>
+                            <option value="language-makefile">Makefile</option>
+                            <option value="language-scala">Scala</option>
+                            <option value="language-dart">Dart</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-item">
+                    <div class="form-control">
+                        <textarea style="height:40vh;font-family:Consolas;" name="code"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="insert-code-btn">Ekle</button>
+            </div>
+        </div>
+    </div>
+    <!--Code Insert-->
+    <!--Link Insert-->
+    <div class="modal" id="cd-editor-link">
+        <div class="modal-content">
+            <div class="modal-top">
+                <div class="title"><i class="cdi cdi-admin-links"></i>&nbsp;&nbsp;Link Ekle</div>
+                <div class="close"><i class="cdi cdi-no-alt"></i></div>
+            </div>
+            <div class="modal-body">
+                <div class="form-item">
+                    <label>URL Adresi</label>
+                    <div class="form-control">
+                        <input type="text" placeholder="http://" name="link-url" />
+                    </div>
+                </div>
+                <div class="form-item">
+                    <label>Link Metni</label>
+                    <div class="form-control">
+                        <input type="text" placeholder="Tıklayınız.." name="link-text" />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="insert-link-btn">Ekle</button>
+            </div>
+        </div>
+    </div>
+    <!--Link Insert-->
+    <!--Image Insert-->
+    <div class="modal" id="cd-editor-image">
+        <div class="modal-content" style="width:70%;margin-top:50px;">
+            <div class="modal-top">
+                <div class="title"><i class="cdi cdi-images-alt2"></i>&nbsp;&nbsp;Görsel Ekle</div>
+                <div class="close"><i class="cdi cdi-no-alt"></i></div>
+            </div>
+            <div class="modal-body" style="height:75vh;">
+
+                <div class="tab-control">
+                    <!--Tab header-->
+                    <div class="tab-header">
+                        <ul>
+                            <li>
+                                <a href="#choose" data-index="choose"><i class="cdi cdi-format-gallery"></i>Yüklenen Resimler</a>
+                            </li>
+                            <li>
+                                <a href="#upload" data-index="upload"><i class="cdi cdi-upload"></i>Sunucuya Yükle</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <!--Tab header-->
+                    <!--Tab content-->
+                    <div class="tab-content">
+                        <!--Image List Tab-->
+                        <div class="tab-item" data-tab="choose">
+                            <div class="gallery">
+                                <div class="gallery-content" data-columns="7" id="cde-gallery-content">
+
+                                </div>
+                            </div>
+                        </div>
+                        <!--Image List Tab-->
+                        <!--Image Upload-->
+                        <div class="tab-item" data-tab="upload">
+                            <div class="file-upload">
+                                <div class="upload-file-area">
+                                    Yüklemek istediğiniz resimleri bu alana sürükleyiniz..
+                                </div>
+                            </div>
+                        </div>
+                        <!--Image Upload-->
+                    </div>
+                    <!--Tab content-->
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="insert-image-btn">Ekle</button>
+            </div>
+        </div>
+    </div>
+    <!--Image Insert-->
+
+
+
+    @using (Html.BeginForm("Edit", "Question", FormMethod.Post, new { id = "question-form" }))
+    {
+        @Html.AntiForgeryToken();
+        <div class="form-item">
+            <div class="form-control">
+                @Html.HiddenFor(m => m.ID, new { id = "question-id" })
+                <!--<input name="Title" type="text" placeholder="Sorunuz için başlık seçin.." />-->
+                @Html.TextBoxFor(m => m.Title, new { placeholder = "Soru başlığı..", value = Model.Title })
+            </div>
+        </div>
+
+        <div class="form-item">
+            <div class="form-control">
+                <!--<input name="Content" type="hidden" />-->
+                @Html.HiddenFor(m => m.Content, new { id = "cd-editor-swap"})
+                <!--CD Editor-->
+                <div class="cd-editor">
+                    <div class="cd-editor-header">
+                        <ul>
+                            <li>
+                                <a href="javascript:void(0)" data-proc="heading">
+                                    <i class="cdi cdi-heading"></i>
+                                </a>
+                            </li>
+                            <li class="seperator"></li>
+                            <li>
+                                <a href="javascript:void(0)" data-proc="bold">
+                                    <i class="cdi cdi-editor-bold"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0)" data-proc="italic">
+                                    <i class="cdi cdi-editor-italic"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0)" data-proc="underline">
+                                    <i class="cdi cdi-editor-underline"></i>
+                                </a>
+                            </li>
+                            <li class="seperator"></li>
+                            <li>
+                                <a href="javascript:void(0)" data-action="link" data-modal="cd-editor-link">
+                                    <i class="cdi cdi-admin-links"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0)" data-action="image" data-modal="cd-editor-image">
+                                    <i class="cdi cdi-format-image"></i>
+                                </a>
+                            </li>
+                            <li class="seperator"></li>
+                            <li>
+                                <a href="javascript:void(0)" data-proc="ul">
+                                    <i class="cdi cdi-editor-ul"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0)" data-proc="ol">
+                                    <i class="cdi cdi-editor-ol"></i>
+                                </a>
+                            </li>
+                            <li class="seperator"></li>
+                            <li>
+                                <a href="javascript:void(0)" data-action="code" data-modal="cd-editor-code">
+                                    <i class="cdi cdi-editor-code"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="cd-editor-body">
+                        <div class="cd-editor-content" contenteditable="true" id="editor-content">
+                            @Html.Raw(Model.Content)
+                        </div>
+                    </div>
+                </div>
+                <!--CD Editor-->
+            </div>
+        </div>
+
+        <div class="form-item">
+            <label>Soru için etiket seçiniz. <small>Sorunuzu kategorize etmemiz ve diğer kullanıcılar tarafından ulaşılabilir olması için etiketler önemlidir.</small></label>
+            <div class="form-control">
+                <div id="ticket-list">
+                    @foreach (var ticket in Model.Tickets)
+                    {
+                        <div class="ticket">
+                            <span>@ticket.Title</span>
+                            <a href="javascript:void(0)"><i class="cdi cdi-no-alt"></i></a>
+                        </div>
+                    }
+                </div>
+                <input type="text" placeholder="Etiket ismi girin." id="ticket-input" />
+                <input type="hidden" id="Tickets" name="Tickets" value="@Model.TicketList" />
+               
+            </div>
+        </div>
+
+        <div class="form-item">
+            <div class="form-control">
+                <button type="submit" class="btn btn-primary" id="form-send-btn">
+                    <i class="cdi cdi-share-alt"></i> Soru Güncelle
+                </button>
+            </div>
+        </div>
+    }
+
+</div>
+<script src="~/Content/script/cd-editor.js"></script>
+<script src="~/Content/script/cd-ticket.js"></script>
+<script src="~/Content/script/question-edit.js"></script>
+
+<script>
+    ticketList = "@Model.TicketList".split(";");
+
+</script>

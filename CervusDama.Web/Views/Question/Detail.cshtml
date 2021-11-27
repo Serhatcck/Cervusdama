@@ -1,0 +1,208 @@
+﻿@model CervusDama.Data.Model.QuestionModel.QuestionDetailModel
+@{
+    ViewBag.Title = "Soru & Cevap | " + Model.Title;
+    Layout = "~/Views/Shared/_MainLayouth.cshtml";
+}
+
+<div class="page-container">
+    @if (!String.IsNullOrEmpty(Model.ActionResult))
+    {
+        <div class="alert" id="alert" style="display: block;">
+            <div class="message">@Model.ActionResult</div>
+            <a href="javascript:void(0)" class="close" onclick="closeAlert()"><i class="cdi cdi-no-alt"></i></a>
+        </div>
+    }
+    <h1 class="page-title">
+        @Model.Title
+        <a href="@Url.RouteUrl("Questions")" style="float:right; font-size:16px;"><i class="cdi cdi-undo"></i> Sorulara Dön</a>
+    </h1>
+
+    <!--Question Detail-->
+    @Html.HiddenFor(m => m.ID, new { id = "question-id" })
+    <div class="question-detail">
+        <div class="q-top">
+            <div class="q-user-info">
+                <div class="info-item">
+                    <img src="~/Uploads/profile/@(Model.UserInfo.Slug).png" alt="profile">
+                    <a href="@Url.RouteUrl("UserProfile", new { slug = Model.UserInfo.Slug })">@Model.UserInfo.FirstName @Model.UserInfo.LastName</a>
+                </div>
+                <div class="info-item date">@Model.CreateAt.ToString("dd MMMM yyyy HH:mm")</div>
+            </div>
+            @if (User.Identity.IsAuthenticated && int.Parse(User.Identity.Name) == Model.UserInfo.ID)
+            {
+                <div class="q-tool">
+                    <div class="q-tool-item">
+                        <a href="javascript:void(0)" class="delete" data-action="question-delete" data-id="@Model.ID"><i class="cdi cdi-trash"></i>Sil</a>
+                    </div>
+                    <div class="q-tool-item">
+                        <a href="@Url.RouteUrl("QuestionEdit", new { slug = Model.Slug })"><i class="cdi cdi-edit"></i>Düzenle</a>
+                    </div>
+                    <div class="q-tool-item">
+                        <a href="javascript:void(0)" class="solve" data-action="question-solve" data-id="@Model.ID"><i class="cdi cdi-yes-alt"></i>@(Model.IsSolved ? "Çözülmedi" : "Çözüldü")</a>
+                    </div>
+                </div>
+            }
+
+        </div>
+        <div class="q-text">
+            @Html.Raw(Model.Content)
+        </div>
+        <div class="q-footer">
+
+            <div class="q-footer-left">
+                <!-- Kullanıcı Giriş Yapmışsa ve Kullanıcı bu sorunun sahibi değil ise -->
+                @if (User.Identity.IsAuthenticated && int.Parse(User.Identity.Name) != Model.UserInfo.ID)
+                {
+                    <div class="q-footer-item">
+                        <a href="javascript:void(0)" id="question-like-btn"><i class="cdi cdi-arrow-up-alt2"></i></a><span class="q-like" id="q-like">@Model.LikeCount</span>
+                    </div>
+                    <div class="q-footer-item">
+                        <a href="javascript:void(0)" id="question-dislike-btn"><i class="cdi cdi-arrow-down-alt2"></i></a><span class="q-dlike" id="q-dlike">@Model.DisLikeCount</span>
+                    </div>
+                }
+                else
+                {
+                    <div class="q-footer-item">
+                        <span class="q-like">@Model.LikeCount</span>
+                    </div>
+                    <div class="q-footer-item">
+                        <span class="q-dlike">@Model.DisLikeCount</span>
+                    </div>
+                }
+
+            </div>
+
+            <div class="q-footer-right">
+                <ul class="ticket">
+                    @foreach (var ticket in Model.Tickets)
+                    {
+                        <li><a href="@Url.RouteUrl("TicketDetail", new { slug = ticket.Slug})"><span>#</span>@ticket.Title</a></li>
+                    }
+                </ul>
+            </div>
+            <div class="clear-fix"></div>
+        </div>
+    </div>
+    <!--Question Detail-->
+
+    @if (Model.Answers.Count > 0)
+    {
+        <h2 class="page-title" style="margin-top:30px;">Cevaplar</h2>
+        foreach (var answer in Model.Answers)
+        {
+            <!--Answer Content-->
+            <div class="answer-content">
+                <div class="a-user-info">
+                    <div class="info-item">
+                        <img src="~/Uploads/profile/@(answer.UserInfo.Slug).png" alt="profile">
+                        <a href="@Url.RouteUrl("UserProfile", new { slug = answer.UserInfo.Slug })">@answer.UserInfo.FirstName @answer.UserInfo.LastName</a>
+                    </div>
+                    <div class="info-item">@answer.CreateAt.ToString("dd MMMM yyyy HH:mm")</div>
+                    @if (answer.isSolved)
+                    {
+                        <a href="javascript:void(0)">
+                            <i class="cdi cdi-yes-alt"></i> Çözdü
+                        </a>
+                    }
+                </div>
+                <div class="answer-text">
+                    @answer.Content
+                </div>
+                <div class="a-footer">
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <div class="a-footer-left">
+                            <ul class="a-tool">
+                                <li>
+                                    <a href="javascript:void(0)" class="answer-like-btn" data-id="@answer.ID">
+                                        <i class="cdi cdi-arrow-up-alt2"></i>
+                                    </a>
+                                    <span class="a-like">@answer.LikeCount</span>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0)" class="answer-dislike-btn" data-id="@answer.ID">
+                                        <i class="cdi cdi-arrow-down-alt2"></i>
+                                    </a>
+                                    <span class="a-dlike">@answer.DislikeCount</span>
+                                </li>
+                            </ul>
+                        </div>
+                    }
+                    else
+                    {
+                        <!-- Kullanıcı Oturum Açmamış İse-->
+                        <div class="a-footer-left">
+                            <ul class="a-tool">
+                                <li>
+                                    <span class="a-like">@answer.LikeCount</span>
+                                </li>
+                                <li>
+                                    <span class="a-dlike">@answer.DislikeCount</span>
+                                </li>
+                            </ul>
+                        </div>
+                    }
+
+                    @if (User.Identity.IsAuthenticated && int.Parse(User.Identity.Name) == Model.UserInfo.ID)
+                    {
+                        <div class="a-footer-right">
+                            <a href="javascript:void(0)" data-id="@answer.ID" class="solve-link">
+                                <i class="cdi cdi-yes-alt"></i> Çözdü
+                            </a>
+                        </div>
+                    }
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        if (int.Parse(User.Identity.Name) == answer.UserInfo.ID)
+                        {
+                            <div class="a-footer-right">
+
+                                <a href="javascript:void(0)" class="edit-answer" data-id="@answer.ID"><i class="cdi cdi-edit"></i></a>
+                                <a href="javascript:void(0)" class="delete-answer" data-id="@answer.ID"><i class="cdi cdi-trash"></i></a>
+
+                            </div>
+                        }
+                    }
+                    <div class="clear-fix"></div>
+                </div>
+            </div>
+            <!--Answer Content-->
+        }
+    }
+    else
+    {
+        <div class="no-content">Henüz Cevap eklenmemiş.</div>
+    }
+
+    @{
+        Html.RenderAction("Insert", "Answer", new { slug = Model.Slug, questionId = Model.ID });
+        Html.RenderAction("Edit", "Answer");
+    }
+
+</div>
+
+<script>
+    /*
+    $(document).ready(function () {
+        $('a[data-action="question-solve"]').click(function () {
+            var id = $(this).data('id');
+            sendRequest({ 'id': id }, 'Question/Solved');
+        });
+
+        var proc = '';
+        $('a[data-action="question-delete"]').click(function () {
+            var id = $(this).data('id');
+            $('#check-alert .message').html('Soruyu silmek istedinizden emin misiniz? Bu işlemi geri alamazsınız.');
+            $('#check-alert').slideDown();
+            proc = 'question-delete';
+            $('#question-id').val(id);
+        });
+
+        $('#alert-ok-btn').click(function () {
+            if (proc == 'question-delete') {
+                sendRequest({ 'id': $('#question-id').val() }, 'Question/Delete');
+            }
+        });
+    });*/
+</script>
+<script src="~/Content/script/question-detail.js"></script>

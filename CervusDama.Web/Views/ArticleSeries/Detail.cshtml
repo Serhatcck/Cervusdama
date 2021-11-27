@@ -1,0 +1,172 @@
+﻿@model CervusDama.Data.Model.ArticleSeriesModel.ArticleSeriesModel
+@{
+	ViewBag.Title = "Seri Makaleler";
+	Layout = "~/Views/Shared/_ArticleListLayouth.cshtml";
+}
+
+<!--Read Mode-->
+<div class="modal" id="read-box">
+	<div class="read-menu">
+		<div class="menu-item">
+			<a href="javascript:void(0)" id="night">Karanlık Mod</a>
+		</div>
+		<div class="menu-item">
+			<input type="range" value="16" min="16" max="46" step="5" id="ptc" />
+			<span id="pt-vw">16px</span>
+		</div>
+	</div>
+	<div class="modal-content" style="width:97%; margin:50px auto; max-height:80vh;">
+		<div class="modal-top">
+			<div class="title">@Model.Title</div>
+			<div class="close"><i class="cdi cdi-no-alt"></i></div>
+		</div>
+		<div class="modal-body read-mode-modal">
+			<!--Article Content-->
+			@Html.Raw(Model.Article.Content)
+			<!--Article Content-->
+		</div>
+		<div class="modal-footer"></div>
+	</div>
+</div>
+<!--Read Mode-->
+
+<div class="article-series-list">
+	<div class="link-list">
+		@{ Html.RenderAction("SeriesCategoryList", "ArticleSeries", new { slug = Model.Slug }); }
+	</div>
+</div>
+
+<div class="article-series">
+	<div class="article-content">
+		<article>
+			<h1 id="baslik-0">
+				<i class="@Model.Article.CategoryIcon"></i> @Model.Article.Title
+				<a href="javascript:void(0)" style="float:right;" data-target="read-box" data-trigger="modal" title="Okuma Modu">
+					<i class="cdi cdi-welcome-view-site"></i>
+				</a>
+				
+				<a href="@Url.RouteUrl("ArticleSeries")" style="float:right; margin-right:20px;" title="Geri Dön">
+					<i class="cdi cdi-exit"></i>
+				</a>
+			</h1>
+			<div class="article-detail">
+				<div id="okuma-suresi"></div>
+				<div>@Model.Article.CreateAt.ToString("dd MMMM yyyy HH:mm")</div>
+			</div>
+
+
+			@Html.Raw(Model.Article.Content)
+
+
+			@*<div class="article-navigator">
+					<div class="navigate-button">
+						<a href="#">
+							<i class="cdi cdi-arrow-left-alt"></i> Önceki Yazı
+						</a>
+					</div>
+					<div class="navigate-button">
+						<a href="#">
+							Sonraki Yazı <i class="cdi cdi-arrow-right-alt"></i>
+						</a>
+					</div>
+				</div>*@
+		</article>
+
+		<div class="content-table-series">
+			<ul id="content-table-series">
+				<li>İçindekiler</li>
+			</ul>
+		</div>
+	</div>
+
+</div>
+
+<div class="article-footer-bar">
+	Copyright &copy; 2020 - Tüm hakları saklıdır.
+</div>
+
+<script>
+
+	$(document).ready(function () {
+		//okuma süresi hesaplama
+		var text = $('article').text();
+		text = text.replace(/(^\s*) | (\s*$)/gi, "");
+		text = text.replace(/[ ]{2,}/gi, " ");
+		text = text.replace(/\n/, /"\n"/);
+
+		var word = text.split(' ');
+		var wordSize = word.length;
+
+		$('#okuma-suresi').html('Tahmini okuma süresi : ' + Math.ceil(((wordSize / 2) / 60)) + ' dakika.');
+	});
+
+	// -- Başlık Geçişleri --
+	const browserHeight = document.documentElement.clientHeight * (1 / 2);
+	let baslik;
+	let topicClick = false;
+	window.addEventListener('load', () => {
+
+		baslik = Array.from(document.querySelectorAll('article h2')).filter(b => b.offsetParent !== null);
+		let contentList = document.getElementById('content-table-series');
+
+		baslik.forEach(function (element) {
+			let text = element.innerHTML;
+			let id = text.toLowerCase().replace(/[^a-z0-9 -]/g, '').replace(/\s+/g, '-').replace(/-+/g, '-');
+			element.setAttribute('id', id);
+
+			let li = document.createElement('li');
+			let a = document.createElement('a');
+			a.href = 'javascript:void(0)';
+			a.dataset.ref = '#' + id;
+			a.text = text;
+			a.addEventListener('click', (e) => {
+				scrollToHeading(e.target.getAttribute('data-ref'));
+			});
+			li.appendChild(a);
+
+			contentList.appendChild(li);
+		});
+
+		document.querySelectorAll('#content-table-series li')[1].classList.add('active');
+	});
+
+	function scrollToHeading(id) {
+		let element = document.querySelector(id);
+		let offset = element.offsetTop;
+		topicClick = true;
+		document.querySelectorAll('#content-table-series li').forEach(function (el) {
+			el.classList.remove('active');
+		});
+
+		id = 'a[data-ref="' + id + '"]';
+		let activeLink = document.querySelector(id);
+		activeLink.parentNode.classList.add('active');
+
+		let body = $('html');
+		body.stop().animate({ scrollTop: (offset - 80) }, 600, 'swing', function () {
+			topicClick = false;
+		});
+	}
+
+	window.addEventListener('scroll', () => {
+		if (!topicClick) {
+			let id = '';
+			for (let i = baslik.length - 1; i >= 0; i--) {
+				const rect = baslik[i].getBoundingClientRect();
+				if (rect.top + rect.height / 3 <= browserHeight) {
+					id = baslik[i].getAttribute('id');
+					break;
+				}
+			}
+
+			if (id !== '') {
+				document.querySelectorAll('#content-table-series li').forEach(function (el) {
+					el.classList.remove('active');
+				});
+				id = 'a[data-ref="#' + id + '"]';
+				let activeLink = document.querySelector(id);
+				activeLink.parentNode.classList.add('active');
+			}
+		}
+	});
+</script>

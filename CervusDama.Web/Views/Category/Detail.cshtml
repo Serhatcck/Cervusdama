@@ -1,0 +1,89 @@
+﻿@model CervusDama.Data.Model.ArticleModel.ArticleCategoryListModel
+@{
+	ViewBag.Title = "Kategori Detayı";
+	Layout = "~/Views/Shared/_MainLayouth.cshtml";
+}
+
+
+<div class="page-container">
+
+	<div class="blog-content">
+		<div class="blog-left-content">
+			<h2 class="page-title">Kategoriler</h2>
+			@{ Html.RenderAction("ListCategory", "Category", new { tip = 2 }); }
+		</div>
+		<div class="blog-right-content">
+
+
+			@if (Model.Category != null)
+			{
+				<div class="article-category-info">
+					<h3>
+						<i class="@Model.Category.Icon" style="color:@Model.Category.Color"></i>
+						&nbsp;
+						<span>@Model.Category.Title Programlama Dili</span>
+					</h3>
+					<div class="article-category-description">@Model.Category.Description</div>
+				</div>
+			}
+
+
+
+			<h2 class="page-title">Eklenen Son Makaleler</h2>
+
+			<div class="blog-list">
+				@if (Model.Articles.Count() > 0)
+				{
+					foreach (var item in Model.Articles)
+					{
+						<!--Blog İçerik-->
+						<div class="form-post-card">
+							<div class="image">
+								<img src="~/uploads/medium/@item.Image" />
+							</div>
+							<div class="title"><a href="@Url.RouteUrl("ArticleDetail", new { userName = "@" + item.UserInfo.Slug, slug = item.Slug })">@item.Title</a></div>
+							<div class="info-text">@item.Description</div>
+							<div class="user-info">
+								<div class="profile">
+									<img src="~/Uploads/profile/@(item.UserInfo.Slug).png" alt="profile">
+									<div class="author-content">
+										<a href="@Url.RouteUrl("UserProfile", new { slug = item.UserInfo.Slug })">@item.UserInfo.FirstName @item.UserInfo.LastName</a>
+										<small>@item.CreateAt.ToString("dd MMMM yyyy HH:mm")</small>
+									</div>
+								</div>
+								<div class="share">
+									<a href="javascript:void(0)"><i class="cdi cdi-visibility"></i>&nbsp;&nbsp;@item.Hit</a>
+								</div>
+							</div>
+						</div>
+						<!--Blog İçerik-->
+					}
+				}
+				else
+				{
+					<div class="no-content">
+						Seçilen kategori için henüz makale eklenmemiş.
+					</div>
+				}
+			</div>
+		</div>
+		<div class="clear-fix"></div>
+	</div>
+
+</div>
+
+<script>
+	$(document).ready(function () {
+		$('.ct-menu li a').click(function () {
+			$(this).parent().find('ul').slideToggle();
+		});
+
+		var url = '@Url.RouteUrl("CategoryDetail")';
+		console.log(url);
+
+		var activeCategory = $('.blog-left-content a[href="' + url + '"]');
+
+		activeCategory.parent().parent().show();
+		activeCategory.css({ 'font-weight': '600', 'color':'#79b32f'});
+	});
+</script>

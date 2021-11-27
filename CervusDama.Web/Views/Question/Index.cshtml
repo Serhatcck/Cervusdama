@@ -1,0 +1,177 @@
+﻿@model IEnumerable<CervusDama.Data.Model.QuestionModel.QuestionListModel>
+@{
+    ViewBag.Title = "Soru & Cevap";
+    Layout = "~/Views/Shared/_MainLayouth.cshtml";
+}
+
+
+<div class="page-container">
+
+    <h1 class="page-title">
+        Soru & Cevap - Son Sorular
+        <a href="@Url.RouteUrl("QuestionInsert")" style="float:right; font-size:16px;"><i class="cdi cdi-sos"></i> Soru sor!</a>
+    </h1>
+
+    <!--Question Seacrh-->
+    <div class="question-search">
+        <div class="search-form">
+            <form method="GET">
+                <input type="text" name="search" value="@Request.Params["search"]" placeholder="Sorularda Arayın..." />
+                <button type="submit">
+                    <i class="cdi cdi-search"></i>
+                </button>
+            </form>
+
+        </div>
+        <ul class="seach-menu">
+            <!-- Sıralama İçin hrefi düzenle-->
+            @if (ViewBag.desc)
+            {
+                <li><a href="?desc=false">En Son</a></li>
+            }
+            else
+            {
+                <li><a href="?desc=true">En Son</a></li>
+            }
+            <li><a href="#">Aktif</a></li>
+            <li><a href="#">Çok Oy</a></li>
+        </ul>
+    </div>
+    <!--Question Item-->
+    @if (Model.Count() > 0)
+    {
+        foreach (var item in Model)
+        {
+            <!--Question Item-->
+            <div class="question">
+                <div class="q-count">
+                    <div class="q-view">
+                        @item.Hit
+                        <br />
+                        Görüntüleme
+                    </div>
+                    <div class="q-answer">
+                        @item.AnswerCount
+                        <br />
+                        Yanıt
+                    </div>
+                </div>
+                <div class="q-content">
+                    <div class="q-head">
+                        <h1>
+                            <a href="@Url.RouteUrl("QuestionDetail",new { slug = item.Slug})">@item.Title</a>
+                        </h1>
+                        @if (item.IsSolved)
+                        {
+                            <div class="q-status resolve"><i class="cdi cdi-yes-alt"></i>&nbsp;&nbsp;Çözüldü</div>
+                        }
+                    </div>
+                    <div class="q-body">
+                        @Html.Raw(item.Content)
+                    </div>
+                    <div class="q-footer">
+                        <ul class="ticket">
+                            @foreach (var ticket in item.Tickets)
+                            {
+                                <li><a href="@Url.RouteUrl("TicketDetail", new { slug = ticket.Slug})"><span>#</span>@ticket.Title</a></li>
+                            }
+                        </ul>
+
+                        <div class="q-user">
+                            <img src="~/Uploads/profile/@(item.UserSlug).png" alt="profile">
+                            <a href="@Url.RouteUrl("UserProfile", new { slug = item.UserSlug})">@item.FirstName @item.LastName</a>
+                            <div class="q-date">@item.CreateAt.ToString("dd MMMM yyyy HH:mm")</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--Question Item-->
+        }
+    }
+    else
+    {
+        <div class="no-content">Herhangi Bir Soru Bulunamadı.</div>
+    }
+
+
+</div>
+
+<script>
+    // Sayfa değerini belirtir
+    var page = 1;
+    //Veri alınıp alınmadığını belirtir
+    var inRun = false;
+    //Sayfanın sonuna gelip gelmediğini belirtir
+    var pageIsDown = false;
+    //Scrolun yukarı mı aşşağı mı olduğunu kontrol etmek için kullanılır
+    var lastScroll = 0;
+    $(window).scroll(function () {
+        if (lastScroll < $(this).scrollTop()) {
+            lastScroll = $(this).scrollTop()
+            if ($(document).scrollTop() >= (($(document).height() * 4) / 6)) {
+                loadQuestions();
+            }
+        }
+    });
+
+    function loadQuestions() {
+        if (page > -1 && !inRun && !pageIsDown) {
+            inRun = true;
+            page++;
+            $.ajax({
+                url: urlGenerator('Question/IndexLazyLoad'),
+                data: { page: page, search: "@ViewBag.Search", desc: "@ViewBag.desc" },
+                success: function (data) {
+                    if (data.questions.length > 0) {
+                        $(data.questions).each(function (i, item) {
+                            console.log(item);
+                            var ticketLi = "";
+                            for (var i = 0; i < item.Tickets.length; i++) {
+                                ticketLi += '<li><a href="/etiket/' + item.Tickets[i].Slug + '"><span>#</span>' + item.Tickets[i].Title + '</a></li>';
+                            }
+                            $('.page-container').append('<div class="question">\
+                                    <div class="q-count">\
+                                        <div class="q-view">'+ item.Hit + '\
+                                            <br>\
+                                            Görüntüleme\
+                                        </div>\
+                                        <div class="q-answer">'+ item.AnswerCount + '\
+                                            <br>\
+                                            Yanıt\
+                                        </div>\
+                                    </div>\
+                                    <div class="q-content">\
+                                        <div class="q-head">\
+                                            <h1>\
+                                                <a href="/soru-detay/'+ item.Slug + '"> ' + item.Title + '</a>\
+                                            </h1>\
+                                        </div>\
+                                        <div class="q-body">'+ item.Content + '\
+                                        </div>\
+                                        <div class="q-footer">\
+                                            <ul class="ticket">'+ ticketLi + '\
+                                            </ul>\
+                                            <div class="q-user">\
+                                                <img src="/Uploads/profile/'+ item.UserSlug + '.png" alt="profile">\
+                                                <a href="/profil/'+ item.UserSlug + '">' + item.FirstName + ' ' + item.LastName + '</a>\
+                                                <div class="q-date">'+ item.CreateAt +'</div>\
+                                            </div>\
+                                        </div>\
+                                    </div>\
+                                </div>')
+                        })
+                        inRun = false;
+                    }
+                    else {
+                        inRun = false;
+                        pageIsDown = true;
+                    }
+
+                }
+            })
+            
+
+        }
+    }
+
+</script>

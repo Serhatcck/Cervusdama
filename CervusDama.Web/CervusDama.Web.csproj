@@ -1,0 +1,448 @@
+﻿<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
+  <Import Project="..\packages\EntityFramework.6.4.4\build\EntityFramework.props" Condition="Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{D15E20FA-15CD-4E4A-8CFD-C49DFFB86C5B}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>CervusDama.Web</RootNamespace>
+    <AssemblyName>CervusDama.Web</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <UseIISExpress>true</UseIISExpress>
+    <Use64BitIISExpress />
+    <IISExpressSSLPort>44354</IISExpressSSLPort>
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="HtmlAgilityPack, Version=1.11.29.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
+      <HintPath>..\packages\HtmlAgilityPack.1.11.29\lib\Net45\HtmlAgilityPack.dll</HintPath>
+    </Reference>
+    <Reference Include="LinqKit, Version=1.1.23.0, Culture=neutral, PublicKeyToken=bc217f8844052a91, processorArchitecture=MSIL">
+      <HintPath>..\packages\LinqKit.1.1.23\lib\net45\LinqKit.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=2.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.7\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.7\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\images\1.png" />
+    <Content Include="Content\images\2.png" />
+    <Content Include="Content\images\21.png" />
+    <Content Include="Content\images\3.png" />
+    <Content Include="Content\images\4301912.jpg" />
+    <Content Include="Content\images\4a62747c-ddcd-4a32-a375-177b948d7ff8.jfif" />
+    <Content Include="Content\images\article-icon.png" />
+    <Content Include="Content\images\article-insert.png" />
+    <Content Include="Content\images\bg-vector-1.png" />
+    <Content Include="Content\images\bg-vector-2.png" />
+    <Content Include="Content\images\bgl-a.jpg" />
+    <Content Include="Content\images\bgl-b.jpeg" />
+    <Content Include="Content\images\body.png" />
+    <Content Include="Content\images\bullet.png" />
+    <Content Include="Content\images\cck.png" />
+    <Content Include="Content\images\ch.png" />
+    <Content Include="Content\images\dotnet.svg" />
+    <Content Include="Content\images\e329c407-3ca5-4d0b-b60d-d835c5a784bc.jfif" />
+    <Content Include="Content\images\error.png" />
+    <Content Include="Content\images\favicon.ico" />
+    <Content Include="Content\images\footer.png" />
+    <Content Include="Content\images\grad.png" />
+    <Content Include="Content\images\image-sample.png" />
+    <Content Include="Content\images\logo-blur.png" />
+    <Content Include="Content\images\logo.png" />
+    <Content Include="Content\images\logo.svg" />
+    <Content Include="Content\images\mail-logo.png" />
+    <Content Include="Content\images\notifications-sml.png" />
+    <Content Include="Content\images\okb.png" />
+    <Content Include="Content\images\proglang.jpg" />
+    <Content Include="Content\images\programming-languages.jpeg" />
+    <Content Include="Content\images\programmingLang.png" />
+    <Content Include="Content\images\question.jpg" />
+    <Content Include="Content\images\quote.png" />
+    <Content Include="Content\images\rh02-developer-live-java.jpg" />
+    <Content Include="Content\images\rh02-panel1.jpg" />
+    <Content Include="Content\images\rh02-panel2.jpg" />
+    <Content Include="Content\images\rh02-panel3.jpg" />
+    <Content Include="Content\images\save.svg" />
+    <Content Include="Content\images\search.png" />
+    <Content Include="Content\images\slider-1.jpg" />
+    <Content Include="Content\images\Untitled-1.png" />
+    <Content Include="Content\mailTemplates\ForgotPassword.txt" />
+    <Content Include="Content\mailTemplates\NewMemeber.txt" />
+    <Content Include="Content\script\article-detial.js" />
+    <Content Include="Content\script\article-edit.js" />
+    <Content Include="Content\script\article-insert.js" />
+    <Content Include="Content\script\cd-editor.js" />
+    <Content Include="Content\script\cd-ticket.js" />
+    <Content Include="Content\script\jquery-3.5.1.min.js" />
+    <Content Include="Content\script\lazy-loading.js" />
+    <Content Include="Content\script\profile.js" />
+    <Content Include="Content\script\question-insert.js" />
+    <Content Include="Content\script\script.js" />
+    <Content Include="Content\style\style.css" />
+    <Content Include="Content\third-party\chart\Chart.bundle.js" />
+    <Content Include="Content\third-party\chart\Chart.bundle.min.js" />
+    <Content Include="Content\third-party\chart\Chart.css" />
+    <Content Include="Content\third-party\chart\Chart.js" />
+    <Content Include="Content\third-party\chart\Chart.min.css" />
+    <Content Include="Content\third-party\chart\Chart.min.js" />
+    <Content Include="Content\third-party\chart\utils.js" />
+    <Content Include="Content\third-party\ckeditor\build\ckeditor.js" />
+    <Content Include="Content\third-party\ckeditor\build\translations\af.js" />
+    <Content Include="Content\third-party\ckeditor\build\translations\ar.js" />
+    <Content Include="Content\third-party\ckeditor\build\translations\ast.js" />
+    <Content Include="Content\third-party\ckeditor\build\translations\az.js" />
+    <Content Include="Content\third-party\ckeditor\build\translations\bg.js" />
+    <Content Include="Content\third-party\ckeditor\build\translations\ca.js" />
+    <Content Include="Content\third-party\ckeditor\build\translations\cs.js" />
+    <Content Include="Content\third-party\ckeditor\build\translations\da.js" />
+    <Content Include="Content\third-party\ckeditor\build\translations\de-ch.js" />
+    <Content Include="Content\third-party\ckeditor\build\translations\de.js" />
+    <Content Include="Content\third-party\ckeditor\build\translations\el.js" />
+    <Content Include="Content\third-party\ckeditor\build\translations\en-au.js" />
+    <Content Include="Content\third-party\ckeditor\build\translations\en-gb.js" />
+    <Content Include="Content\third-party\ckeditor\build\translations\en.js" />
+    <Content Include="Content\third-party\ckeditor\build\translations\eo.js" />
+    <Content Include="Content\third-party\ckeditor\build\translations\es.js" />
+    <Content Include="Content\third-party\ckeditor\build\translations\et.js" />
+    <Content Include="Content\third-party\ckeditor\build\translations\eu.js" />
+    <Content Include="Content\third-party\ckeditor\build\translations\fa.js" />
+    <Content Include="Content\third-party\ckeditor\build\translations\fi.js" />
+    <Content Include="Content\third-party\ckeditor\build\translations\fr.js" />
+    <Content Include="Content\third-party\ckeditor\build\translations\gl.js" />
+    <Content Include="Content\third-party\ckeditor\build\translations\gu.js" />
+    <Content Include="Content\third-party\ckeditor\build\translations\he.js" />
+    <Content Include="Content\third-party\ckeditor\build\translations\hr.js" />
+    <Content Include="Content\third-party\ckeditor\build\translations\hu.js" />
+    <Content Include="Content\third-party\ckeditor\build\translations\id.js" />
+    <Content Include="Content\third-party\ckeditor\build\translations\it.js" />
+    <Content Include="Content\third-party\ckeditor\build\translations\ja.js" />
+    <Content Include="Content\third-party\ckeditor\build\translations\km.js" />
+    <Content Include="Content\third-party\ckeditor\build\translations\kn.js" />
+    <Content Include="Content\third-party\ckeditor\build\translations\ko.js" />
+    <Content Include="Content\third-party\ckeditor\build\translations\ku.js" />
+    <Content Include="Content\third-party\ckeditor\build\translations\lt.js" />
+    <Content Include="Content\third-party\ckeditor\build\translations\lv.js" />
+    <Content Include="Content\third-party\ckeditor\build\translations\ms.js" />
+    <Content Include="Content\third-party\ckeditor\build\translations\nb.js" />
+    <Content Include="Content\third-party\ckeditor\build\translations\ne.js" />
+    <Content Include="Content\third-party\ckeditor\build\translations\nl.js" />
+    <Content Include="Content\third-party\ckeditor\build\translations\no.js" />
+    <Content Include="Content\third-party\ckeditor\build\translations\oc.js" />
+    <Content Include="Content\third-party\ckeditor\build\translations\pl.js" />
+    <Content Include="Content\third-party\ckeditor\build\translations\pt-br.js" />
+    <Content Include="Content\third-party\ckeditor\build\translations\pt.js" />
+    <Content Include="Content\third-party\ckeditor\build\translations\ro.js" />
+    <Content Include="Content\third-party\ckeditor\build\translations\ru.js" />
+    <Content Include="Content\third-party\ckeditor\build\translations\si.js" />
+    <Content Include="Content\third-party\ckeditor\build\translations\sk.js" />
+    <Content Include="Content\third-party\ckeditor\build\translations\sl.js" />
+    <Content Include="Content\third-party\ckeditor\build\translations\sq.js" />
+    <Content Include="Content\third-party\ckeditor\build\translations\sr-latn.js" />
+    <Content Include="Content\third-party\ckeditor\build\translations\sr.js" />
+    <Content Include="Content\third-party\ckeditor\build\translations\sv.js" />
+    <Content Include="Content\third-party\ckeditor\build\translations\th.js" />
+    <Content Include="Content\third-party\ckeditor\build\translations\tt.js" />
+    <Content Include="Content\third-party\ckeditor\build\translations\ug.js" />
+    <Content Include="Content\third-party\ckeditor\build\translations\uk.js" />
+    <Content Include="Content\third-party\ckeditor\build\translations\vi.js" />
+    <Content Include="Content\third-party\ckeditor\build\translations\zh-cn.js" />
+    <Content Include="Content\third-party\ckeditor\build\translations\zh.js" />
+    <Content Include="Content\third-party\ckeditor\sample\index.html" />
+    <Content Include="Content\third-party\ckeditor\sample\styles.css" />
+    <Content Include="Content\third-party\ckeditor\src\ckeditor.js" />
+    <Content Include="Content\third-party\cdicons\css\cdicons.css" />
+    <Content Include="Content\third-party\date-picker\icons.png" />
+    <Content Include="Content\third-party\date-picker\zebra_datepicker.min.css" />
+    <Content Include="Content\third-party\date-picker\zebra_datepicker.min.js" />
+    <Content Include="Content\third-party\Devicon\devicon.min.css" />
+    <Content Include="Content\third-party\Devicon\fonts\devicon.svg" />
+    <Content Include="Content\third-party\flaticons\css\flaticon.css" />
+    <Content Include="Content\third-party\flaticons\webfonts\Flaticon.svg" />
+    <Content Include="Content\third-party\prismjs\prism_light.css" />
+    <Content Include="Content\third-party\prismjs\prism.js" />
+    <Content Include="Content\third-party\prismjs\prism_dark.css" />
+    <Content Include="Global.asax" />
+    <Content Include="uploads\large\img1.jpg" />
+    <Content Include="uploads\large\img2.jpg" />
+    <Content Include="uploads\large\img3.png" />
+    <Content Include="uploads\large\img4.jpg" />
+    <Content Include="uploads\large\secici.jpg" />
+    <Content Include="uploads\large\wallhaven48og2k.jpg" />
+    <Content Include="uploads\large\wallhaveng8jpq7.png" />
+    <Content Include="uploads\large\wallhavenmpdv8m.jpg" />
+    <Content Include="uploads\large\wallhavennk51dd.png" />
+    <Content Include="uploads\medium\img1.jpg" />
+    <Content Include="uploads\medium\img2.jpg" />
+    <Content Include="uploads\medium\img3.png" />
+    <Content Include="uploads\medium\img4.jpg" />
+    <Content Include="uploads\medium\secici.jpg" />
+    <Content Include="uploads\medium\wallhaven48og2k.jpg" />
+    <Content Include="uploads\medium\wallhaveng8jpq7.png" />
+    <Content Include="uploads\medium\wallhavenmpdv8m.jpg" />
+    <Content Include="uploads\medium\wallhavennk51dd.png" />
+    <Content Include="uploads\original\img1.jpg" />
+    <Content Include="uploads\original\img2.jpg" />
+    <Content Include="uploads\original\img3.png" />
+    <Content Include="uploads\original\img4.jpg" />
+    <Content Include="uploads\original\secici.jpg" />
+    <Content Include="uploads\original\wallhaven48og2k.jpg" />
+    <Content Include="uploads\original\wallhaveng8jpq7.png" />
+    <Content Include="uploads\original\wallhavenmpdv8m.jpg" />
+    <Content Include="uploads\original\wallhavennk51dd.png" />
+    <Content Include="uploads\profile\serhat.png" />
+    <Content Include="uploads\profile\caglar-1.png" />
+    <Content Include="uploads\thumbnail\img1.jpg" />
+    <Content Include="uploads\thumbnail\img2.jpg" />
+    <Content Include="uploads\thumbnail\img3.png" />
+    <Content Include="uploads\thumbnail\img4.jpg" />
+    <Content Include="uploads\thumbnail\secici.jpg" />
+    <Content Include="uploads\thumbnail\wallhaven48og2k.jpg" />
+    <Content Include="uploads\thumbnail\wallhaveng8jpq7.png" />
+    <Content Include="uploads\thumbnail\wallhavenmpdv8m.jpg" />
+    <Content Include="uploads\thumbnail\wallhavennk51dd.png" />
+    <Content Include="Web.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\AnswerController.cs" />
+    <Compile Include="Controllers\ArticleController.cs" />
+    <Compile Include="Controllers\ArticleSeriesController.cs" />
+    <Compile Include="Controllers\Base\BaseController.cs" />
+    <Compile Include="Controllers\CategoryController.cs" />
+    <Compile Include="Controllers\CodeLibraryController.cs" />
+    <Compile Include="Controllers\CommentController.cs" />
+    <Compile Include="Controllers\FeedBackController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\MediaController.cs" />
+    <Compile Include="Controllers\PagesController.cs" />
+    <Compile Include="Controllers\ProfileController.cs" />
+    <Compile Include="Controllers\QuestionController.cs" />
+    <Compile Include="Controllers\SearchController.cs" />
+    <Compile Include="Controllers\TicketController.cs" />
+    <Compile Include="Controllers\UserController.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\web.config" />
+    <Content Include="Content\third-party\ckeditor\build\ckeditor.js.map" />
+    <None Include="compilerconfig.json" />
+    <None Include="compilerconfig.json.defaults">
+      <DependentUpon>compilerconfig.json</DependentUpon>
+    </None>
+    <Content Include="Views\Shared\_IntroLayouth.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Shared\_MainLayouth.cshtml" />
+    <Content Include="Views\Shared\Partials\Register.cshtml" />
+    <Content Include="Views\Shared\Partials\MainMenu.cshtml" />
+    <Content Include="Views\Home\Rules.cshtml" />
+    <Content Include="Views\Profile\Index.cshtml" />
+    <Content Include="Views\Pages\UserAgreement.cshtml" />
+    <Content Include="Views\Shared\Partials\Login.cshtml" />
+    <Content Include="Views\User\ForgotPassword.cshtml" />
+    <Content Include="Views\User\ForgotPasswordCallBack.cshtml" />
+    <Content Include="Views\Article\Index.cshtml" />
+    <Content Include="Views\Pages\About.cshtml" />
+    <Content Include="Views\Category\ListCategory.cshtml" />
+    <Content Include="Views\Shared\_ArticleListLayouth.cshtml" />
+    <Content Include="Views\Shared\_ProfileLayouth.cshtml" />
+    <Content Include="Views\Article\Insert.cshtml" />
+    <Content Include="Content\third-party\cdicons\font\cdicons.eot" />
+    <Content Include="Content\third-party\flaticons\webfonts\Flaticon.eot" />
+    <Content Include="Content\third-party\flaticons\webfonts\Flaticon.ttf" />
+    <Content Include="Content\third-party\flaticons\webfonts\Flaticon.woff" />
+    <Content Include="Content\third-party\flaticons\webfonts\Flaticon2.eot" />
+    <Content Include="Content\third-party\flaticons\webfonts\Flaticon2.ttf" />
+    <Content Include="Content\third-party\flaticons\webfonts\Flaticon2.woff" />
+    <Content Include="Content\third-party\Devicon\fonts\devicon.eot" />
+    <Content Include="Content\third-party\Devicon\fonts\devicon.ttf" />
+    <Content Include="Content\third-party\Devicon\fonts\devicon.woff" />
+    <None Include="packages.config" />
+    <Content Include="Views\FeedBack\Index.cshtml" />
+    <Content Include="Views\Category\Detail.cshtml" />
+    <Content Include="Views\Question\Index.cshtml" />
+    <Content Include="Views\Question\Detail.cshtml" />
+    <Content Include="Views\Question\Insert.cshtml" />
+    <Content Include="Views\Article\Detail.cshtml" />
+    <Content Include="Views\ArticleSeries\Index.cshtml" />
+    <Content Include="Views\Search\Index.cshtml" />
+    <Content Include="Views\Ticket\Index.cshtml" />
+    <Content Include="Views\Category\ArticleListCategory.cshtml" />
+    <Content Include="Views\Article\ArticleAbsent.cshtml" />
+    <Content Include="Views\Shared\_ErrorLayout.cshtml" />
+    <Content Include="Views\Article\CategoryAbsent.cshtml" />
+    <Content Include="Views\Profile\ProfileArticles.cshtml" />
+    <Content Include="Views\Profile\PersonalInfoUpdate.cshtml" />
+    <Content Include="Views\Profile\ConnectInfoUpdate.cshtml" />
+    <Content Include="Views\Profile\PasswordUpdate.cshtml" />
+    <Content Include="Views\Profile\ProfileAbsent.cshtml" />
+    <Content Include="Views\Pages\CookiePolicy.cshtml" />
+    <Content Include="Views\Home\LastArticles.cshtml" />
+    <Content Include="Views\Comment\InsertArticleComment.cshtml" />
+    <Content Include="Views\Pages\Index.cshtml" />
+    <Content Include="Views\Pages\LegalNotices.cshtml" />
+    <Content Include="Views\Answer\Insert.cshtml" />
+    <Content Include="Views\ArticleSeries\ArticleSeriesAbsent.cshtml" />
+    <Content Include="Views\ArticleSeries\SeriesCategoryList.cshtml" />
+    <Content Include="Views\ArticleSeries\Detail.cshtml" />
+    <Content Include="Views\Profile\QuestionList.cshtml" />
+    <Content Include="Views\Profile\AnsweredQuestionList.cshtml" />
+    <Content Include="Views\Comment\EditArticleComment.cshtml" />
+    <Content Include="Views\Pages\CorrectAskQuestion.cshtml" />
+    <Content Include="Views\CodeLibrary\Index.cshtml" />
+    <Content Include="Views\Category\Index.cshtml" />
+    <Content Include="Views\User\DrawImg.cshtml" />
+    <Content Include="Views\Pages\UsageAgreement.cshtml" />
+    <Content Include="Views\Article\Edit.cshtml" />
+    <None Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+    <Folder Include="Views\Media\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CervusDama.Authorization\CervusDama.Authorization.csproj">
+      <Project>{77ee96fe-bf92-4c93-ac61-43fa6121aca5}</Project>
+      <Name>CervusDama.Authorization</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CervusDama.Data.Model\CervusDama.Data.Model.csproj">
+      <Project>{c4198e0f-911a-4384-9360-291b13881c5a}</Project>
+      <Name>CervusDama.Data.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CervusDama.Data\CervusDama.Data.csproj">
+      <Project>{68964c72-490e-4873-8f33-2c13e4cb0882}</Project>
+      <Name>CervusDama.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CervusDama.Utility\CervusDama.Utility.csproj">
+      <Project>{73f218e2-7f5e-4984-8c41-6735e23fae80}</Project>
+      <Name>CervusDama.Utility</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>9000</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:9000</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.4.4\build\EntityFramework.props'))" />
+    <Error Condition="!Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.4.4\build\EntityFramework.targets'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
+  </Target>
+  <Import Project="..\packages\EntityFramework.6.4.4\build\EntityFramework.targets" Condition="Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

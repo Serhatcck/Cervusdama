@@ -1,0 +1,213 @@
+﻿@model IEnumerable<CervusDama.Data.Model.TicketModel.TicketListModel>
+@using CervusDama.Admin.Helpers
+@{
+	ViewBag.Title = "Etiketler";
+	Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+<div class="header">
+	<div class="title"><i class="fa fa-ticket-alt fa-lg"></i>&nbsp;&nbsp;ETİKETLER</div>
+</div>
+<div class="content">
+
+	<div class="alert" id="alert">
+		<div class="message"></div>
+		<div class="close"><i class="fa fa-times"></i></div>
+	</div>
+
+	<div class="split-container">
+		<div class="left-container">
+
+			<!--Insert Form-->
+			<div class="form" id="insert-form">
+				<form method="post">
+
+					<div class="form-item">
+						<label>Etiket İsmi</label>
+						<div class="form-control">
+							<input type="text" name="Title" placeholder="Etiket ismi.." />
+						</div>
+					</div>
+
+					<div class="form-item">
+						<label>Slug</label>
+						<div class="form-control">
+							<input type="text" name="Slug" placeholder="Slug.." />
+							<small>Kategori isminin URL için oluşturulmuş halidir. Boş bırakılırsa sistem tarafından otomatik oluşturulacaktır. Tümü küçük harf, rakam ve - işareti içerebilir.</small>
+						</div>
+					</div>
+
+					<div class="form-item">
+						<div class="form-control align-right">
+							<input type="submit" value="Etiket Oluştur" class="btn btn-primary" />
+						</div>
+					</div>
+				</form>
+			</div>
+			<!--Insert Form-->
+			<!--Update Form-->
+			<div class="form" id="update-form" style="display:none;">
+				<form method="post">
+
+					 <input type="hidden" name="ID"/>
+
+					<div class="form-item">
+						<label>Etiket İsmi</label>
+						<div class="form-control">
+							<input type="text" name="Title" placeholder="Etiket ismi.." />
+						</div>
+					</div>
+
+					<div class="form-item">
+						<label>Slug</label>
+						<div class="form-control">
+							<input type="text" name="Slug" placeholder="Slug.." />
+							<small>Kategori isminin URL için oluşturulmuş halidir. Boş bırakılırsa sistem tarafından otomatik oluşturulacaktır. Tümü küçük harf, rakam ve - işareti içerebilir.</small>
+						</div>
+					</div>
+
+					<div class="form-item">
+						<div class="form-control align-right">
+							<input type="reset" value="İptal" class="btn btn-secondary" />
+							<input type="submit" value="Etiket Güncelle" class="btn btn-primary" />
+						</div>
+					</div>
+				</form>
+			</div>
+			<!--Update Form-->
+
+		</div>
+		<div class="right-container">
+			<table class="data-table strip hovered">
+				<thead>
+					<tr>
+						<th class="check">#</th>
+						<th>İsim</th>
+						<th>Slug</th>
+						<th class="prc" colspan="2">İşlemler</th>
+					</tr>
+				</thead>
+				<tbody>
+					@foreach (var item in Model)
+					{
+						<tr>
+							<td class="center"><input type="checkbox" /></td>
+							<td>@item.Title</td>
+							<td>@item.Slug</td>
+							<td class="option">
+								<a href="javascript:void(0)" data-id="@item.ID" class="green edit-link"><i class="fa fa-edit"></i></a>
+							</td>
+							<td class="option">
+								<a href="javascript:void(0)" data-id="@item.ID" class="remove delete-link"><i class="fa fa-times"></i></a>
+							</td>
+						</tr>
+					}
+
+				</tbody>
+				<tfoot>
+					<tr>
+						<td colspan="5">
+							@Html.Pager((int)ViewBag.currentPage, (int)ViewBag.totalData, "/etiket")
+						</td>
+					</tr>
+				</tfoot>
+			</table>
+		</div>
+	</div>
+
+	<script>
+		$(document).ready(function () {
+			$('a.edit-link').click(function () {
+				var el = $(this).parent().parent();
+				$('#update-form input[name=ID]').val($(this).data('id'));
+				$('#update-form input[name=Title]').val(el.find('td:eq(1)').text());
+				$('#update-form input[name=Slug]').val(el.find('td:eq(2)').text());
+				$('#insert-form').hide();
+				$('#update-form').show();
+			});
+
+			$('#insert-form form').submit(function () {
+
+				$.ajax({
+					type: 'POST',
+					contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+					url: '@Url.Action("Insert", "Ticket")',
+					data: $('#insert-form form').serialize(),
+					success: function (data) {
+
+						if (data.status) {
+							$('#alert').removeClass('danger').addClass('success');
+						} else {
+							$('#alert').removeClass('success').addClass('danger');
+						}
+
+						$('#alert .message').html(data.message);
+
+						$('#alert').slideDown();
+					}
+				});
+
+				return false;
+			});
+
+			$('#update-form form').submit(function () {
+
+				$.ajax({
+					type: 'POST',
+					contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+					url: '@Url.Action("Edit", "Ticket")',
+					data: $('#update-form form').serialize(),
+					success: function (data) {
+
+						if (data.status) {
+							$('#alert').removeClass('danger').addClass('success');
+						} else {
+							$('#alert').removeClass('success').addClass('danger');
+						}
+
+						$('#alert .message').html(data.message);
+
+						$('#alert').slideDown();
+					}
+				});
+
+				return false;
+			});
+
+
+			$('#update-form input[type=reset]').click(function () {
+				$('#update-form').hide();
+				$('#insert-form').show();
+			});
+
+			$('.delete-link').click(function () {
+				var id = $(this).data('id'), el = $(this).parent().parent();
+
+				var dialog = confirm("Kategoriyi silme istediğinizden emin misiniz?");
+
+				if (dialog == true) {
+					$.ajax({
+						type: 'GET',
+						contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+						url: '@Url.Action("Delete", "Ticket")',
+						data: {'id' : id},
+						success: function (data) {
+
+							if (data.status) {
+								$('#update-alert').removeClass('danger').addClass('success');
+								el.remove();
+							} else {
+								$('#update-alert').removeClass('success').addClass('danger');
+							}
+
+							$('#update-alert .message').html(data.message);
+							$('#update-alert').slideDown();
+						}
+					});
+				} else {
+					return false;
+				}
+			});
+		});
+
+	</script>
+</div>

@@ -1,0 +1,228 @@
+﻿
+@{
+	ViewBag.Title = "İstatistikler";
+	Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+<div class="header">
+	<div class="title"><i class="fa fa-sliders-h fa-lg"></i>&nbsp;&nbsp;CERVUS DAMA YÖNETİM PANELİ</div>
+</div>
+<div class="content">
+	<!--Sayısal Veriler-->
+	<div class="card">
+		<div class="card-title"><i class="fa fa-chart-bar" style="color:#5cb85c"></i>&nbsp;&nbsp;Sayısal Veriler</div>
+		<div class="card-content">
+			@{
+				Html.RenderAction("DashboardNumericData", "Home");
+			}
+		</div>
+	</div>
+	<!--Sayısal Veriler-->
+	<!--Grafik Veriler-->
+	<div class="card">
+		<div class="card-title">
+			<i class="fa fa-chart-line" style="color:#0088CC"></i>&nbsp;&nbsp;Yıllık Veriler&nbsp;
+			<select id="data-year" name="data-year">
+				@for (int i = 2020; i <= DateTime.Now.Year; i++)
+				{
+					<option value="@i" @(i == DateTime.Now.Year ? "selected" : "")>@i Yılı Verileri </option>
+				}
+			</select>
+		</div>
+		<div class="card-content" id="data-sonuc">
+			<div style="width:100%; height:400px" id="chartdiv"></div>
+		</div>
+	</div>
+	@*
+	<!--Grafik Veriler-->
+	<div class="split-container">
+		<div class="card-left">
+			<div class="card">
+				<div class="card-title">
+					<i class="fa fa-comments" style="color:#CF8450"></i>&nbsp;&nbsp;Kullanıcı Geri Bildirimleri
+				</div>
+				<div class="card-content">
+					@{ Html.RenderAction("DashboardFeedBacks", "FeedBack"); }
+				</div>
+			</div>
+		</div>
+		<div class="card-right">
+			<div class="card">
+				<div class="card-title">
+					<i class="fa fa-chart-line" style="color:#bf3333"></i>&nbsp;&nbsp;Kullanıcı Geri Bildirimleri
+				</div>
+				<div class="card-content" id="data-sonuc">
+					Sağ
+				</div>
+			</div>
+		</div>
+	</div>*@
+
+</div>
+
+<script src="~/Content/third-party/amChart/core.js"></script>
+<script src="~/Content/third-party/amChart/charts.js"></script>
+<script src="~/Content/third-party/amChart/animated.js"></script>
+
+<script>
+
+	var chart;
+	var year = @DateTime.Now.Year
+
+	am4core.ready(function () {
+
+		// Themes begin
+		am4core.useTheme(am4themes_animated);
+		// Themes end
+
+		// Create chart instance
+		chart = am4core.create("chartdiv", am4charts.XYChart);
+
+		// Add data
+		chart.data = chartLoad(year);
+
+		// Create category axis
+		var categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
+		categoryAxis.dataFields.category = "date";
+		categoryAxis.renderer.opposite = false;
+
+		// Create value axis
+		var valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+		valueAxis.renderer.inversed = false;
+		valueAxis.title.text = "Sayısal Veriler";
+		valueAxis.renderer.minLabelPosition = 0;
+
+		// Create series
+		var series1 = chart.series.push(new am4charts.LineSeries());
+		series1.dataFields.valueY = "user";
+		series1.dataFields.categoryX = "date";
+		series1.name = "Kullanıcı";
+		var bullet1 = series1.bullets.push(new am4charts.CircleBullet());
+		bullet1.fill = am4core.color("#0088CC");
+		series1.tooltipText = "{categoryX} ayında katılan kullanıcılar: {valueY}";
+		series1.legendSettings.valueText = "{valueY}";
+		series1.visible = false;
+		series1.stroke = am4core.color("#0088CC");
+		series1.strokeWidth = 2;
+
+		var series2 = chart.series.push(new am4charts.LineSeries());
+		series2.dataFields.valueY = "article";
+		series2.dataFields.categoryX = "date";
+		series2.name = 'Makale';
+		var bullet2 = series2.bullets.push(new am4charts.CircleBullet());
+		bullet2.fill = am4core.color("#69aa46");
+		series2.tooltipText = "{categoryX} ayında eklenen makaleler: {valueY}";
+		series2.legendSettings.valueText = "{valueY}";
+		series2.stroke = am4core.color("#69aa46");
+		series2.strokeWidth = 2;
+
+		var series3 = chart.series.push(new am4charts.LineSeries());
+		series3.dataFields.valueY = "question";
+		series3.dataFields.categoryX = "date";
+		series3.name = 'Soru & Cevap';
+		var bullet3 = series3.bullets.push(new am4charts.CircleBullet());
+		bullet3.fill = am4core.color("#d15b47");
+		series3.tooltipText = " {categoryX} ayında eklenen Soru & Cevap'lar: {valueY}";
+		series3.legendSettings.valueText = "{valueY}";
+		series3.stroke = am4core.color("#d15b47");
+		series3.strokeWidth = 2;
+
+		// Add chart cursor
+		chart.cursor = new am4charts.XYCursor();
+		chart.cursor.behavior = "zoomY";
+
+
+		let hs1 = series1.segments.template.states.create("hover")
+		hs1.properties.strokeWidth = 5;
+		series1.segments.template.strokeWidth = 1;
+
+		let hs2 = series2.segments.template.states.create("hover")
+		hs2.properties.strokeWidth = 5;
+		series2.segments.template.strokeWidth = 1;
+
+		let hs3 = series3.segments.template.states.create("hover")
+		hs3.properties.strokeWidth = 5;
+		series3.segments.template.strokeWidth = 1;
+
+		// Add legend
+		chart.legend = new am4charts.Legend();
+		chart.legend.itemContainers.template.events.on("over", function (event) {
+			var segments = event.target.dataItem.dataContext.segments;
+			segments.each(function (segment) {
+				segment.isHover = true;
+			})
+		})
+
+		chart.legend.itemContainers.template.events.on("out", function (event) {
+			var segments = event.target.dataItem.dataContext.segments;
+			segments.each(function (segment) {
+				segment.isHover = false;
+			})
+		})
+
+	}); // end am4core.ready()
+
+	function chartLoad(years) {
+
+		var result = [];
+
+		$.ajax({
+			type: 'POST',
+			url: '/chart-data/' + years,
+			async:false,
+			success: function (res) {
+				if (res.status) {
+					//chart_data.splice(0, chart_data.length);
+
+					var points = [[], [], []];
+					$.each(res.data.ArticleData, function (i, element) {
+						points[0][element.Month - 1] = element.Count;
+					});
+
+
+					$.each(res.data.UserData, function (i, element) {
+						points[1][element.Month - 1] = element.Count;
+					});
+
+
+					$.each(res.data.QuestionData, function (i, element) {
+						points[2][element.Month - 1] = element.Count;
+					});
+
+
+					var aylar = ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"];
+
+					for (var i = 0; i < points[0].length; i++) {
+
+						if (typeof points[1][i] === 'undefined') {
+							points[1][i] = 0;
+						}
+
+						if (typeof points[0][i] === 'undefined') {
+							points[0][i] = 0;
+						}
+
+						if (typeof points[2][i] === 'undefined') {
+							points[2][i] = 0;
+						}
+
+						result.push({
+							"date": aylar[i],
+							"user": points[1][i],
+							"article": points[0][i],
+							"question": points[2][i]
+						});
+					}
+				}
+			}
+		});
+
+		return result;
+	}
+
+	$(document).ready(function () {
+		$('#data-year').change(function () {
+			year = $(this).val();
+			chart.data = chartLoad(year);
+		});
+	});
+</script>

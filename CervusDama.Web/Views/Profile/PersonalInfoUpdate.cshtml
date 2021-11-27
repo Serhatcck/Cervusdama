@@ -1,0 +1,54 @@
+﻿@model CervusDama.Data.Model.ProfileModel.ProfileInfoModel
+
+<div class="alert" id="PersonalInfoUpdate-alert">
+	<div class="message"></div>
+	<div class="close">
+		<i class="cdi cdi-no-alt"></i>
+	</div>
+</div>
+
+@using (Html.BeginForm("PersonalInfoUpdate", "Profile", FormMethod.Post, new { id = "PersonalInfoUpdate" }))
+{
+	@Html.AntiForgeryToken()
+
+	<!--Form item-->
+	<div class="form-item">
+		@Html.LabelFor(m => m.FirstName)
+		<div class="form-control">
+			@Html.TextBoxFor(m => m.FirstName, new { placeholder = "Adınız.." })
+		</div>
+	</div>
+	<!--Form item-->
+	<!--Form item-->
+	<div class="form-item">
+		@Html.LabelFor(m => m.LastName)
+		<div class="form-control">
+			@Html.TextBoxFor(m => m.LastName, new { placeholder = "Soyadınız.." })
+		</div>
+	</div>
+	<!--Form item-->
+	<!--Form item-->
+	<div class="form-item">
+		@Html.LabelFor(m => m.NickName)
+		<div class="form-control">
+			@Html.TextBoxFor(m => m.NickName, new { placeholder = "Kullanıcı adı.." })
+			<small>Kullanıcı adı eşsiz olmalıdır.</small>
+		</div>
+	</div>
+	<!--Form item-->
+	<!--Form item-->
+	<div class="form-item">
+		@Html.LabelFor(m => m.Bio)
+		<div class="form-control">
+			@Html.TextAreaFor(m => m.Bio, new { placeholder = "Kendiniz hakkında bir şeyler yazın..", style="height:100px;" })
+		</div>
+	</div>
+	<!--Form item-->
+	<!--Form item-->
+	<div class="form-item">
+		<div class="form-control" style="text-align:right">
+			<button class="btn btn-primary">Bilgileri Kaydet</button>
+		</div>
+	</div>
+	<!--Form item-->
+}

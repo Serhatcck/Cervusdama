@@ -1,0 +1,80 @@
+﻿@model IEnumerable<CervusDama.Data.Model.QuestionModel.QuestionListModel>
+
+@if (Model.Count() > 0)
+{
+	foreach (var item in Model)
+	{
+		<!--Makale İtem-->
+		<div class="article-item">
+			<div class="data-column">
+				<div class="article-icon">
+					<i class="cdi cdi-editor-help"></i>
+				</div>
+			</div>
+			<div class="data-column">
+				<h5><a href="@Url.RouteUrl("QuestionDetail", new { userName = "@" + item.UserSlug, slug = item.Slug })">@item.Title</a></h5>
+
+				@foreach (var ticket in item.Tickets)
+				{
+					<a href="@Url.RouteUrl("TicketDetail", new { slug = ticket.Slug })" class="ticket">@ticket.Title</a>@(", ")
+				}
+			</div>
+			<div class="data-column date">
+				@item.CreateAt.ToString("dd MMMM yyyy HH:mm")
+			</div>
+			<div class="data-column">
+				@if (item.Status == (byte)CervusDama.Data.QuestionStatus.Active)
+				{
+					<span class="label info">Yayında</span>
+				}
+				else if (item.Status == (byte)CervusDama.Data.QuestionStatus.Solved)
+				{
+					<span class="label success">Çözüldü</span>
+				}
+				else if (item.Status == (byte)CervusDama.Data.QuestionStatus.Blockked)
+				{
+					<span class="label danger">Engelli</span>
+				}
+			</div>
+			@if (User.Identity.IsAuthenticated)
+			{
+				if (int.Parse(User.Identity.Name) == item.UserID)
+				{
+					<div class="data-column tool">
+						<a href="#" class="edit">
+							<i class="cdi cdi-edit"></i>
+						</a>
+					</div>
+
+					<div class="data-column tool">
+						<a href="javascript:void(0)" class="block" data-action="question-block" data-id="@item.ID">
+							<i class="cdi cdi-remove"></i>
+						</a>
+					</div>
+
+					<div class="data-column tool">
+						<a href="javascript:void(0)" class="delete" data-action="question-delete" data-id="@item.ID">
+							<i class="cdi cdi-trash"></i>
+						</a>
+					</div>
+				}
+				else
+				{
+					<div class="data-column" style="text-align:center;width:110px;">-</div>
+				}
+			}
+			else
+			{
+				<div class="data-column" style="text-align: center;width: 110px;">-</div>
+			}
+
+		</div>
+		<!--Makale İtem-->
+	}
+}
+else
+{
+	<div class="no-content">
+		Henüz gösterilecek bir içerik yok.
+	</div>
+}

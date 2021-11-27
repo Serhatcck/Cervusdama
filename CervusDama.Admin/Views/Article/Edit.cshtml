@@ -1,0 +1,253 @@
+﻿@model CervusDama.Data.Model.ArticleModel.ArticleInsertModel
+@{
+	ViewBag.Title = "Yazı Düzenle";
+	Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+
+<div class="header">
+	<div class="title"><i class="fa fa-file-alt fa-lg"></i>&nbsp;&nbsp;YAZI Düzenle</div>
+	<div class="input">
+		<button class="btn btn-primary" onclick="$('#article-form').submit();">Kaydet</button>
+	</div>
+</div>
+<div class="content">
+
+	<div class="alert" id="alert">
+		<div class="message"></div>
+		<div class="close"><i class="fa fa-times"></i></div>
+	</div>
+
+	@using (Html.BeginForm("Insert", "Article", FormMethod.Post, new { id = "article-form" }))
+	{
+		<div class="split-container">
+			<div class="editor-left">
+				<div class="form">
+					<form>
+
+						<div class="form-item">
+							<div class="form-control">
+								@Html.TextBoxFor(m => m.Title, new { placeholder = "Yazı başlığı.." })
+							</div>
+						</div>
+
+						<div class="form-item">
+							<div class="form-control">
+								<textarea name="content-temp" id="content-temp"></textarea>
+								@Html.HiddenFor(m => m.Content)
+							</div>
+						</div>
+
+					</form>
+				</div>
+			</div>
+			<div class="editor-right">
+				<!--Akordeon-->
+				<div class="accordion">
+					<!--Accrodion Item-->
+					<div class="accordion-item">
+						<div class="accordion-header">
+							<text>Durum ve Görünürlük</text>
+							<i class="fa fa-chevron-up"></i>
+						</div>
+						<div class="accordion-content">
+							<div class="item">Görünürlük</div>
+							<div class="item">
+								<select name="ViewState" style="width:100%; padding:5px;">
+									<option value="1" selected>Herkese Açık</option>
+									<option value="2">Sadece Üyeler</option>
+								</select>
+							</div>
+							<div class="item">Yayınla</div>
+							<div class="item">
+								<select name="Status" style="width: 100%; padding: 5px;">
+									<option value="1" selected>Hemen Yayınla</option>
+									<option value="2">Taslak Olarak Ekle</option>
+								</select>
+							</div>
+							<div class="item">
+								<span>
+									<label>
+										<input type="checkbox" name="IsPinned" value="1" />&nbsp;&nbsp;Anasayfaya sabitle.
+									</label>
+								</span>
+							</div>
+							<div class="item">
+								<span>
+									<label>
+										<input type="checkbox" name="IsComment" value="1" checked />&nbsp;&nbsp;Yorum yapılabilir.
+									</label>
+								</span>
+							</div>
+						</div>
+					</div>
+					<!--Accordion Item-->
+					<!--Accrodion Item-->
+					<div class="accordion-item">
+						<div class="accordion-header">
+							<text>Kategoriler</text>
+							<i class="fa fa-chevron-down"></i>
+						</div>
+						<div class="accordion-content">
+							@{
+								Html.RenderAction("CategoryList", "Article");
+							}
+						</div>
+					</div>
+					<!--Accordion Item-->
+					<!--Accrodion Item-->
+					<div class="accordion-item">
+						<div class="accordion-header">
+							<text>Etiketler</text>
+							<i class="fa fa-chevron-down"></i>
+						</div>
+						<div class="accordion-content">
+							<div class="tickets">
+								<div class="ticket-content" id="ticket-list"></div>
+								<input type="text" placeholder="Etiket ismi" id="ticket-box" />
+								<small>Eklemek için Enter tuşuna basın. Etiketleri virgül ile ayırarak birden ekleyebilirsiniz.</small>
+								<input type="hidden" name="Tickets" id="tickets">
+							</div>
+						</div>
+					</div>
+					<!--Accordion Item-->
+					<!--Accrodion Item-->
+					<div class="accordion-item">
+						<div class="accordion-header">
+							<text>Makale Görseli</text>
+							<i class="fa fa-chevron-down"></i>
+						</div>
+						<div class="accordion-content">
+							<div class="image">
+								<img src="Content/images/galeri/image10.jpg" />
+								<!--<div class="thumbnail">
+									Makale Görseli Seç
+								</div>-->
+							</div>
+							<div class="item">
+								<a href="#">Görseli değiştir</a>
+								<a href="#" class="clr-red">Görseli kaldır</a>
+							</div>
+						</div>
+					</div>
+					<!--Accordion Item-->
+				</div>
+
+				<!--Akordeon-->
+			</div>
+		</div>
+	}
+</div>
+
+<script src="~/Content/third-party/ckeditor/build/ckeditor.js"></script>
+<script>
+	$(document).ready(function () {
+		var editor;
+		ClassicEditor
+			.create(document.querySelector('#content-temp'), {
+
+				toolbar: {
+					items: [
+						'heading',
+						'|',
+						'bold', 'italic', 'underline', 'strikethrough',
+						'|',
+						'fontBackgroundColor', 'fontColor',
+						'|',
+						'indent', 'outdent',
+						'|',
+						'numberedList', 'bulletedList', 'link', 'insertTable',
+						'code', 'blockQuote',
+						'|',
+						'imageUpload', 'mediaEmbed', 'CKFinder',
+						'|',
+						'specialCharacters', 'superscript', 'subscript']
+				},
+				language: 'tr',
+				image: {
+					toolbar: ['imageTextAlternative', 'imageStyle:full', 'imageStyle:side']
+				},
+				table: {
+					contentToolbar: ['tableColumn', 'tableRow', 'mergeTableCells']
+				},
+				licenseKey: '',
+				height: '500px'
+			})
+			.then(newEditor => {
+				editor = newEditor;
+			})
+			.catch(error => { });
+
+		var tickets = [];
+
+		$('#ticket-box').keyup(function (e) {
+			if (e.keyCode == 13) {
+				var ticket = $(this).val();
+				ticket = ticket.trim();
+
+				if (ticket.length > 0) {
+
+					if (ticket.indexOf(',') > -1) {
+
+						var ticket_part = ticket.split(',');
+
+						for (var i = 0; i < ticket_part.length; i++) {
+							if (ticket_part[i].trim().length > 0) {
+								if (tickets.indexOf(ticket_part[i]) == -1) {
+									$('#ticket-list').append('<div class="ticket"><text>' + ticket_part[i] + '</text><a href="#"><span class="fa fa-times"></span></a></div >');
+									tickets.push(ticket_part[i]);
+									$('input[name="Tickets"]').val(tickets.join(';'));
+									$(this).val('');
+								}
+							}
+						}
+
+					} else {
+						if (tickets.indexOf(ticket) == -1) {
+							$('#ticket-list').append('<div class="ticket"><text>' + ticket + '</text><a href="#"><span class="fa fa-times"></span></a></div >');
+							tickets.push(ticket);
+							$('input[name="Tickets"]').val(tickets.join(';'));
+							$(this).val('');
+						} else {
+							alert('Girdiğiniz etiket zaten ekli.');
+						}
+					}
+
+				} else {
+					alert("Girilen ifade etiket olmak için çok kısa.");
+				}
+			}
+		});
+
+		$('#ticket-list').delegate('a', 'click', function () {
+			var ticket_index = $(this).parent().index();
+			$(this).parent().remove();
+			tickets.splice(ticket_index, 1);
+			$('input[name="Tickets"]').val(tickets.join(';'));
+		});
+
+		$('#article-form').submit(function () {
+			$('input[name="Content"]').val(editor.getData());
+			$.ajax({
+				type: 'POST',
+				url: $(this).attr('action'),
+				contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+				data: $('#article-form').serialize(),
+				success: function (data) {
+
+					if (data.status) {
+						$('#alert').removeClass('danger').addClass('success');
+					} else {
+						$('#alert').removeClass('success').addClass('danger');
+					}
+
+					$('#alert .message').html(data.message);
+
+					$('#alert').slideDown();
+				}
+			});
+
+			return false;
+		});
+	});
+</script>

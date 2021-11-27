@@ -1,0 +1,12 @@
+﻿@model IEnumerable<CervusDama.Data.Model.UtilModel.ListModel>
+
+<ul class="categories">
+	@foreach (var item in Model)
+	{
+		<li>
+			<label>
+				<input type="checkbox" value="@item.ValueInt" name="CategoryID[]" /> @item.Text
+			</label>
+		</li>
+	}
+</ul>

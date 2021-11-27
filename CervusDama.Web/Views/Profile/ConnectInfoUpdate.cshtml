@@ -1,0 +1,46 @@
+﻿@model CervusDama.Data.Model.ProfileModel.ContactInfoModel
+
+<div class="alert" id="ConnectInfoUpdate-alert">
+	<div class="message"></div>
+	<div class="close">
+		<i class="cdi cdi-no-alt"></i>
+	</div>
+</div>
+
+@using (Html.BeginForm("ConnectInfoUpdate", "Profile", FormMethod.Post, new { id = "ConnectInfoUpdate" }))
+{
+	@Html.AntiForgeryToken()
+
+	<!--Form item-->
+	<div class="form-item">
+		@Html.LabelFor(m => m.Email)
+		<div class="form-control">
+			@Html.TextBoxFor(m => m.Email, new { placeholder = "Email adresiniz.." })
+			<small>Cervus Dama platformunda oturum açmak için kullanacağınız mail adresidir. Sadece siz görebilirsiniz.</small>
+		</div>
+	</div>
+	<!--Form item-->
+	<!--Form item-->
+	<div class="form-item">
+		@Html.LabelFor(m => m.WebSite)
+		<div class="form-control">
+			@Html.TextBoxFor(m => m.WebSite, new { placeholder = "Web sitesi dresiniz.." })
+		</div>
+	</div>
+	<!--Form item-->
+	<!--Form item-->
+	<div class="form-item">
+		@Html.LabelFor(m => m.CityName)
+		<div class="form-control">
+			@Html.TextBoxFor(m => m.CityName, new { placeholder = "Ülke ismi/Şehir ismi" })
+		</div>
+	</div>
+	<!--Form item-->
+	<!--Form item-->
+	<div class="form-item">
+		<div class="form-control" style="text-align:right">
+			<button type="submit" class="btn btn-primary">Bilgileri Kaydet</button>
+		</div>
+	</div>
+	<!--Form item-->
+}

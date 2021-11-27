@@ -1,0 +1,78 @@
+﻿@model IEnumerable<CervusDama.Data.Model.ArticleModel.ArticleBigListModel>
+
+<input type="hidden" value="" id="article-id"/>
+
+@foreach (var item in Model)
+{
+	<!--Makale İtem-->
+	<div class="article-item">
+		<div class="data-column">
+			<div class="article-icon">
+				<i class="@item.BaseCategory.Icon" style="color: @item.BaseCategory.Color;"></i>
+			</div>
+		</div>
+		<div class="data-column">
+			<h5><a href="@Url.RouteUrl("ArticleDetail", new {userName = "@" + item.UserInfo.Slug, slug = item.Slug })">@item.Title</a></h5>
+
+			@foreach (var ticket in item.Tickets)
+			{
+				<a href="@Url.RouteUrl("TicketDetail", new { slug = ticket.Slug })" class="ticket">@ticket.Title</a>@(", ")
+			}
+		</div>
+		<div class="data-column date">
+			@item.CreateAt.ToString("dd MMMM yyyy HH:mm")
+		</div>
+		<div class="data-column">
+			@if (item.Status == (byte)CervusDama.Data.ArticleStatus.Active)
+			{
+				<span class="label info">Yayında</span>
+			}
+			else if (item.Status == (byte)CervusDama.Data.ArticleStatus.NotApproved)
+			{
+				<span class="label warning">Onaylanmadı</span>
+			}
+			else if (item.Status == (byte)CervusDama.Data.ArticleStatus.Correction)
+			{
+				<span class="label danger">Düzeltme</span>
+			}
+			else if (item.Status == (byte)CervusDama.Data.ArticleStatus.Blockked)
+			{
+				<span class="label danger">Engelli</span>
+			}
+		</div>
+		@if (User.Identity.IsAuthenticated)
+		{
+			if (int.Parse(User.Identity.Name) == item.UserInfo.ID)
+			{
+				<div class="data-column tool">
+					<a href="@Url.RouteUrl("ArticleEdit", new { id = item.ID })" class="edit">
+						<i class="cdi cdi-edit"></i>
+					</a>
+				</div>
+
+				<div class="data-column tool">
+					<a href="javascript:void(0)" class="block" data-action="article-block" data-id="@item.ID">
+						<i class="cdi cdi-remove"></i>
+					</a>
+				</div>
+
+				<div class="data-column tool">
+					<a href="javascript:void(0)" class="delete" data-action="article-delete" data-id="@item.ID">
+						<i class="cdi cdi-trash"></i>
+					</a>
+				</div>
+			}
+			else
+			{
+				<div class="data-column" style="text-align:center;width:110px;">@item.Hit Görüntüleme</div>
+			}
+		}
+		else
+		{
+			<div class="data-column" style="text-align: center;width: 110px;">@item.Hit Görüntüleme</div>
+		}
+
+	</div>
+	<!--Makale İtem-->
+}
+

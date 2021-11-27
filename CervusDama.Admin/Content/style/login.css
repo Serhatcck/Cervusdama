@@ -1,0 +1,216 @@
+﻿@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200;0,300;0,400;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,600;1,700;1,800;1,900&display=swap');
+
+* {
+	box-sizing: border-box;
+	outline: 0 !important;
+	font-family: 'Nunito', sans-serif;
+}
+
+body {
+	background: url(../images/bg.jpg);
+}
+
+a {
+	text-decoration: none;
+	font-size: 14px;
+	color: #0088cc;
+}
+
+	a:hover {
+		text-decoration: underline;
+	}
+
+.login-wrap {
+	width: 450px;
+	height: auto;
+	margin: 100px auto 0 auto;
+	display: block;
+}
+
+.login-form {
+	display: block;
+	width: 100%;
+	height: auto;
+	border: 1px solid #d5d5d5;
+	border-radius: 5px;
+	background: url(../images/bg-pattern-2.png) no-repeat #FFF;
+	padding-bottom: 30px;
+	box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.2);
+}
+
+.content-block {
+	width: 100%;
+	display: block;
+	padding: 30px 10px;
+	text-align: center;
+}
+
+	.content-block h1 {
+		font-size: 22px;
+		display: block;
+		text-align: center;
+	}
+
+	.content-block small {
+		color: #787878;
+		font-size: 13px;
+	}
+
+.form-item {
+	display: block;
+	width: 100%;
+	padding: 10px 30px;
+}
+
+	.form-item label {
+		display: block;
+		width: 100%;
+		font-size: 14px;
+		margin-bottom: 5px;
+		cursor: pointer;
+	}
+
+	.form-item .form-control {
+		display: block;
+		width: 100%;
+	}
+
+input[type="text"], input[type="password"], input[type="email"] {
+	border: 1px solid #d0d0d0;
+	padding: 10px;
+	font-size: 14px;
+	display: block;
+	width: 100%;
+	border-radius: 5px;
+	color: #767676;
+	font-weight: 400;
+}
+
+	input[type="text"]:focus, input[type="password"]:focus, input[type="email"]:focus {
+		border-color: #0077b3;
+		-webkit-transition: 0.5s;
+		transition: 0.5s;
+	}
+
+.btn {
+	display: inline-block;
+	padding: 10px 25px;
+	text-align: center;
+	font-size: 14px;
+	border-radius: 4px;
+	border: 1px solid;
+	cursor: pointer;
+	text-shadow: 0px 1px 0px #000;
+	box-shadow: 0 1px 0px 0px rgba(255, 255, 255, 0.2) inset;
+	transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+	.btn:hover {
+		background: #029ae6;
+		transition: all 0.3s ease;
+	}
+
+	.btn:active {
+		/*box-shadow: inset 0 -3px 8px rgba(0,0,0,0.4);*/
+		-webkit-box-shadow: 0 0 0 3px rgba(91, 192, 222, 0.5);
+		box-shadow: 0 0 0 3px rgba(91, 192, 222, 0.5);
+		transition: all 0.0s ease;
+	}
+
+.btn-blue {
+	background-color: #0077b3;
+	border-color: #0077b3 #0077b3 #005580;
+	color: #ffffff;
+}
+
+.btn-large {
+	padding: 10px 50px;
+}
+
+.center {
+	text-align: center;
+}
+
+.copy-text {
+	display: block;
+	margin-top: 45%;
+	text-align: center;
+	color: #888888;
+}
+
+input[type=checkbox] {
+	font-size: 14px;
+	position: relative;
+	border: 1px solid #bababa;
+	display: inline-block;
+	line-height: 1em;
+	margin: 0;
+	padding: 0;
+	width: 15px;
+	height: 15px;
+	vertical-align: text-top;
+	background: #FFFFFF;
+	-webkit-appearance: none;
+	-webkit-border-radius: 4px;
+	outline: 0;
+	cursor: pointer;
+	-webkit-box-shadow: inset 0 1px 3px rgba(0,0,0,.095);
+	box-shadow: inset 0 1px 3px rgba(0,0,0,.095);
+	-webkit-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+	transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+	margin-top: 2px;
+}
+
+	input[type=checkbox]:checked::after {
+		position: absolute;
+		content: '';
+		left: 2px;
+		top: 2px;
+		height: 9px;
+		width: 9px;
+		border: none;
+		background: #0d74bb;
+		border-radius: 3px;
+	}
+
+input[type=radio] {
+	font-size: 14px;
+	position: relative;
+	border: 1px solid #bababa;
+	display: inline-block;
+	line-height: 1em;
+	margin: 0;
+	padding: 0;
+	width: 1em;
+	height: 1em;
+	vertical-align: text-top;
+	background: #FFFFFF;
+	-webkit-appearance: none;
+	-webkit-border-radius: 7px;
+	outline: 0;
+	cursor: pointer;
+	-webkit-box-shadow: inset 0 1px 3px rgba(0,0,0,.095);
+	box-shadow: inset 0 1px 3px rgba(0,0,0,.095);
+	-webkit-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+	transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+}
+
+	input[type=radio]:checked::after {
+		position: absolute;
+		content: '';
+		width: 8px;
+		height: 8px;
+		background: #0d74bb;
+		border-radius: 5px;
+		top: 2px;
+		left: 2px;
+	}
+
+
+.login-message {
+	font-size: 15px;
+	color: #d14130;
+	display: block;
+	text-align: center;
+	padding-top: 15px;
+}

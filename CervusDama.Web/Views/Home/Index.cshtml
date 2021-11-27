@@ -1,0 +1,77 @@
+﻿
+@{
+	ViewBag.Title = "CervusDama - Software Developer Community";
+	Layout = "~/Views/Shared/_IntroLayouth.cshtml";
+}
+
+<div class="slider">
+	<div class="text">
+		<h1>CervusDama</h1>
+		<p>Yazılım ve bilişim alanında bilgi paylaşım platformu.</p>
+	</div>
+	<div class="search">
+		<form method="get" action="/arama" id="search-form">
+			<input type="text" name="query" placeholder="CervusDama üzerinde ara.." />
+			<div class="sc-icon" onclick="$('#search-form').submit();">
+				<i class="cdi cdi-search"></i>
+			</div>
+		</form>
+		<ul class="tickets">
+			<li><a href="@Url.RouteUrl("TicketDetail", new { slug = "algoritma" })">Algoritma</a></li>
+			<li><a href="@Url.RouteUrl("TicketDetail", new { slug = "veri-yapilari" })">Veri yapıları</a></li>
+			<li><a href="@Url.RouteUrl("TicketDetail", new { slug = "programlama" })">Programlama</a></li>
+			<li><a href="@Url.RouteUrl("TicketDetail", new { slug = "siber-guvenlik" })">Siber Güvenlik</a></li>
+			<li>Popüler aramalar : </li>
+		</ul>
+	</div>
+</div>
+<div class="content-wrapper" style="background:#FFF;">
+	<div class="content-part">
+		<!--Giriş-->
+		<div class="side-title">Bu platformda neler bulacaksınız.</div>
+		<div class="side-text">CervusDama tamamen gönüllü katılım ile geliştirilen bir bilgi paylaşım platformudur. Bu platform içerisinde aşağıdaki bölümlerden faydalanabilir ve sizde katkıda bulunabilirsiniz.</div>
+		<div class="site-parts">
+			<div class="items" onclick="window.location = '@Url.RouteUrl("Articles")';">
+				<div class="icon" style="color: rgb(113, 137, 191);">
+					<i class="cdi cdi-clipboard"></i>
+				</div>
+				<h3>Teknik Makaleler</h3>
+				<p>
+					Çeşitli bilişim/yazılım konularında, zengin içerikli ve titizlikle hazırlanan teknik makaleler.
+				</p>
+			</div>
+			<div class="items" onclick="window.location = '@Url.RouteUrl("Questions")';">
+				<div class="icon" style="color:#8eb943;">
+					<i class="cdi cdi-editor-help"></i>
+				</div>
+				<h3>Soru & Cevap</h3>
+				<p>
+					Yazılım geliştirme aşamasında karşılaştığınız problemleri profesyonellere danışın.
+				</p>
+			</div>
+			<div class="items" onclick="window.location = '@Url.RouteUrl("CodeLibraries")'">
+				<div class="icon" style="color: rgb(186, 107, 87);">
+					<i class="cdi cdi-editor-code"></i>
+				</div>
+				<h3>Kod Kütüphanesi</h3>
+				<p>
+					Çeşitli programlama dillerinde sık ihtiyaç duyulacak kaynak kod parçaları.
+				</p>
+			</div>
+		</div>
+		<!--Giriş-->
+	</div>
+</div>
+<!--Last Post-->
+<div class="content-wrapper" style="background:#F6F6F6;">
+	<div class="content-part">
+		<div class="side-title">Son eklenen makaleler.</div>
+		<div class="side-text">CervusDama kullanıcıları tarafından yayınlanan son makaleler.</div>
+		<div class="site-parts">
+			@{
+				Html.RenderAction("LastArticles", "Home");
+			}
+		</div>
+	</div>
+</div>
+<!--Last Post-->

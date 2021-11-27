@@ -1,0 +1,16 @@
+﻿@model IEnumerable<CervusDama.Data.Model.FeedBackModel.FeedBackListModel>
+
+<div class="simple-data-view">
+
+	@foreach (var item in Model)
+	{
+	<div class="simple-data-view-item">
+		<div><i class="fa fa-comment"></i></div>
+		<div>@item.FeedBackTypeText</div>
+		<div>@item.CreateAt.ToString("dd MMMM yyyy HH:mm")</div>
+
+		<div>@item.Content</div>
+	</div>
+	}
+
+</div>

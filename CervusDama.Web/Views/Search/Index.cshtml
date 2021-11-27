@@ -1,0 +1,85 @@
+﻿@model CervusDama.Data.Model.SeacrhModel.SearchModel
+@{
+	ViewBag.Title = "Arama Sonuçları";
+	Layout = "~/Views/Shared/_MainLayouth.cshtml";
+}
+
+<div class="page-container">
+	<h1 class="page-title">Arama Sonuçları</h1>
+
+	<ul class="tool-bar">
+		<li>Aramanıza uygun @Model.Articles.Count() sonuç bulundu.</li>
+		<li><a href="javascript:void(0)" onclick="$('#detail-search').slideToggle()"><i class="cdi cdi-filter"></i> Detaylı Arama</a></li>
+	</ul>
+
+	<div class="detail-search" id="detail-search">
+		@using (Html.BeginForm("Index", "Search", FormMethod.Post))
+		{
+			<div class="form-item">
+				<label class="form-label" for="SearchQuery">Aranacak ifade</label>
+				<div class="form-control">
+					<input type="text" name="SearchQuery" placeholder="Arama metnini giriniz.." id="SearchQuery" />
+				</div>
+			</div>
+
+			<div class="form-item">
+				<label class="form-label">Aramaya dahil edilsin</label>
+				<div class="form-control">
+					<label><input type="checkbox" name="InTitle" value="true" /> Makale başlığında ara.</label>
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					<label><input type="checkbox" name="InContent" value="true" /> Makale içeriğinde ara.</label>
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					<label><input type="checkbox" name="InCategory" value="true" /> Kategorilerde ara.</label>
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					<label><input type="checkbox" name="InTicket" value="true" /> Etiketlerde ara.</label>
+				</div>
+			</div>
+
+			<div class="form-item">
+				<label class="form-label">Tarih aralığında..</label>
+				<div class="form-control">
+					<div class="form-control-group">
+						<label for="startAt">Başlangıç Tarihi</label>
+						<input type="date" placeholder="Başlangıç Tarihi" name="StartAt" id="startAt" />
+					</div>
+
+					<div class="form-control-group">
+						<label for="endAt">Bitiş Tarihi</label>
+						<input type="date" placeholder="Bitiş Tarihi" name="EndAt" id="endAt" />
+					</div>
+				</div>
+			</div>
+
+			<div class="form-item" style="margin-top:0;">
+				<div class="form-control" style="text-align:right;">
+					<button class="btn btn-primary" type="submit"><i class="cdi cdi-search"></i> Detaylı Ara</button>
+				</div>
+			</div>
+		}
+	</div>
+
+	@foreach (var item in Model.Articles)
+	{
+		<!--Arama Sonucu-->
+		<div class="search-result">
+			<div class="title-bar">
+				<a href="@Url.RouteUrl("ArticleDetail", new {userName = "@" + item.UserInfo.Slug, slug = item.Slug })"><i class="cdi cdi-arrow-right"></i>@item.Title</a>
+			</div>
+
+			<div class="sample-content">
+				@item.Description
+			</div>
+
+			<ul>
+				<li>
+					<a href="@Url.RouteUrl("UserProfile", new { slug = item.UserInfo.Slug })">@item.UserInfo.FirstName @item.UserInfo.LastName</a>
+				</li>
+				<li class="date">
+					<text>@item.CreateAt.ToString("dd MMMM yyyy HH:mm")</text> tarihinde yayınlandı.
+				</li>
+			</ul>
+		</div>
+		<!--Arama Sonucu-->
+	}
+
+</div>

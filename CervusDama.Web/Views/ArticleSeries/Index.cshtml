@@ -1,0 +1,32 @@
+﻿@model IEnumerable<CervusDama.Data.Model.ArticleSeriesModel.ArticleSeriesMainModel>
+@{
+	ViewBag.Title = "Seri Makaleler";
+	Layout = "~/Views/Shared/_MainLayouth.cshtml";
+}
+
+<div class="page-container">
+	<h1 class="page-title">Seri Makaleler</h1>
+
+	<p class="important-info">
+		<i class="cdi cdi-info"></i>
+		Seri makeleler, belirli konularda Cervus Dama kullanıcıların yazdığı makalelerden seçilerek bir araya getirilmiştir.
+	</p>
+
+	<div class="article-series-main-list">
+		@foreach (var item in Model)
+		{
+			<!--Blog İçerik-->
+			<div class="form-post-card">
+				<div class="image">
+					<img src="~/uploads/medium/@item.MediaName" />
+				</div>
+				<div class="title"><a href="@Url.RouteUrl("ArticleSeriesDetail", new { articleSeriesSlug = item.Slug })">@item.Title</a></div>
+				<div class="info-text">@item.Description</div>
+				<div class="user-info">
+					<small style="width:100%; text-align:center;">@item.CreateAt.ToString("dd MMMM yyyy HH:mm")</small>
+				</div>
+			</div>
+			<!--Blog İçerik-->
+		}
+	</div>
+</div>

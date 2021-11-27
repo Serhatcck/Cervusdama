@@ -1,0 +1,211 @@
+﻿@model IEnumerable<CervusDama.Data.Entities.Role>
+@{
+	ViewBag.Title = "Kullanıcı Rolleri";
+	Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+<div class="header">
+	<div class="title"><i class="fa fa-user-tag fa-lg"></i>&nbsp;&nbsp;KULLANICI ROLLERİ</div>
+</div>
+
+<div class="alert" id="update-alert">
+	<div class="message"></div>
+	<div class="close"><i class="fa fa-times"></i></div>
+</div>
+
+<div class="content">
+
+	<div class="split-container">
+		<div class="left-container">
+			<!--Insert Form-->
+			<div class="form" id="insert-form-wrapper">
+				@using (Html.BeginForm("Insert", "Role", FormMethod.Post, new { id = "insert-form" }))
+				{
+					Html.ValidationSummary(true);
+
+					<div class="form-item">
+						<label>Rol İsmi</label>
+						<div class="form-control">
+							<input type="text" name="Name" placeholder="Rol ismini giriniz.." required />
+						</div>
+					</div>
+
+					<div class="form-item">
+						<div class="form-control align-right">
+							<input type="submit" value="Rol Oluştur" class="btn btn-primary" />
+						</div>
+					</div>
+				}
+			</div>
+			<!--Insert Form-->
+			<!--Edit Form-->
+			<div class="form" id="edit-form-wrapper" style="display:none;">
+				@using (Html.BeginForm("Edit", "Role", FormMethod.Post, new { id = "edit-form" }))
+				{
+					<input type="hidden" name="ID" />
+					<div class="form-item">
+						<label>Rol İsmi</label>
+						<div class="form-control">
+							<input type="text" name="Name" placeholder="Rol ismini giriniz.." required />
+						</div>
+					</div>
+
+					<div class="form-item">
+						<div class="form-control align-right">
+							<input type="submit" value="Rol Düzenle" class="btn btn-primary" />
+						</div>
+					</div>
+				}
+			</div>
+			<!--Edit Form-->
+		</div>
+		<div class="right-container">
+			<table class="data-table strip hovered" id="roles-table">
+				<thead>
+					<tr>
+						<th class="check">#</th>
+						<th>Açıklama</th>
+						<th class="prc" colspan="2">İşlemler</th>
+					</tr>
+				</thead>
+				<tbody>
+
+					@foreach (var item in Model)
+					{
+						<tr>
+							<td>@item.ID</td>
+							<td>@item.Name</td>
+							<td class="option">
+								<a href="javascript:void(0)" data-id="@item.ID" class="green edit-link"><i class="fa fa-edit"></i></a>
+							</td>
+							<td class="option">
+								<a href="javascript:void(0)" data-id="@item.ID" class="remove delete-link"><i class="fa fa-times"></i></a>
+							</td>
+						</tr>
+					}
+
+				</tbody>
+
+			</table>
+		</div>
+	</div>
+
+	<script>
+
+		$(document).ready(function () {
+			//Silme işlemi
+			$('.delete-link').click(function () {
+				var el = $(this);
+				var result = confirm('Kullanıcı rolünü silmek istediğinizden emin misiniz?');
+
+				if (result) {
+					var id = el.data('id');
+
+					$.ajax({
+						type: 'POST',
+						url: '/Role/Delete',
+						data: { 'id': id },
+						success: function (data) {
+							if (data.status) {
+								$('#update-alert').removeClass('danger').addClass('success');
+								el.parent().parent().remove();
+							} else {
+								$('#update-alert').removeClass('success').addClass('danger');
+							}
+
+							$('#update-alert .message').html(data.message);
+
+							$('#update-alert').slideDown();
+						}
+					});
+				}
+			});
+
+			//Yeni rol ekle
+			$('#insert-form').submit(function (e) {
+				e.preventDefault();
+
+				var name = $('#insert-form input[name="Name"]').val();
+
+				if (name === '') {
+					$('#update-alert').removeClass('success').addClass('danger');
+					$('#update-alert .message').html('Rol ismi boş olamaz!');
+					$('#update-alert').slideDown();
+				} else {
+					$('#update-alert').hide();
+					$.ajax({
+						type: 'POST',
+						url: $(this).attr('action'),
+						data: $(this).serialize(),
+						success: function (data) {
+							if (data.status) {
+								$('#update-alert').removeClass('danger').addClass('success');
+							} else {
+								$('#update-alert').removeClass('success').addClass('danger');
+							}
+
+							$('#update-alert .message').html(data.message);
+
+							$('#update-alert').slideDown();
+
+							setTimeout(function () {
+								window.location.reload();
+							}, 1500);
+						}
+					});
+				}
+
+				return false;
+			});
+
+			//Rol düzenle
+			$('.edit-link').click(function () {
+				var el = $(this);
+				var id = el.data('id');
+				var name = el.parent().parent().find('td').eq('1').text();
+
+				$('#edit-form').find('input[name="Name"]').val(name);
+				$('#edit-form').find('input[name="ID"]').val(id);
+
+				$('#insert-form-wrapper').hide();
+				$('#edit-form-wrapper').show();
+			});
+
+			$('#edit-form').submit(function (e) {
+				e.preventDefault();
+
+				var name = $('#edit-form input[name="Name"]').val();
+
+				if (name === '') {
+					$('#update-alert').removeClass('success').addClass('danger');
+					$('#update-alert .message').html('Rol ismi boş olamaz!');
+					$('#update-alert').slideDown();
+				} else {
+					$('#update-alert').hide();
+					$.ajax({
+						type: 'POST',
+						url: $(this).attr('action'),
+						data: $(this).serialize(),
+						success: function (data) {
+							if (data.status) {
+								$('#update-alert').removeClass('danger').addClass('success');
+							} else {
+								$('#update-alert').removeClass('success').addClass('danger');
+							}
+
+							$('#update-alert .message').html(data.message);
+
+							$('#update-alert').slideDown();
+
+							setTimeout(function () {
+								window.location.reload();
+							}, 1500);
+						}
+					});
+				}
+
+				return false;
+			});
+		});
+
+	</script>

@@ -1,0 +1,57 @@
+﻿@model CervusDama.Data.Model.FeedBackModel.FeedBackInsertModel
+@{
+	ViewBag.Title = "Geri bildirim gönder..";
+	Layout = "~/Views/Shared/_MainLayouth.cshtml";
+}
+
+<div class="page-container">
+	<h1 class="page-title">Geri bildirim gönder..</h1>
+
+	<p class="page-text mg-bottom">
+		cervusdama.com üzerinde karşılaştığınız hataları (bugları), beğenmediğiniz özellikler hakkında önerilerinizi, dilek, istek ve şikayetlerinizi mesajlarını aşağıdaki formu doldurarak bizlere iletebilirsiniz.
+	</p>
+
+	<p class="page-text mg-bottom">
+		cervusdama.com üzerinden kaldırılmasını istediğiniz veya telif hakkı ihlali olduğunu düşündüğünüz içerikleri buradan yöneticilerimize bildirebilirsiniz.
+	</p>
+
+	<p class="page-text mg-bottom">
+		Geri bildirimleriniz cervusdama.com platformunun gelişmesi ve sizlere daha iyi hizmet verebilmemiz için önemlidir.
+	</p>
+
+	@if (ViewBag.Message != null)
+	{
+		<div class="alert alert-success show-flex">
+			<div class="text">@ViewBag.Message</div>
+			<a href="javascript:void(0)" class="close">
+				<i class="fa fa-times"></i>
+			</a>
+		</div>
+	}
+
+	@using (Html.BeginForm("Index", "FeedBack", FormMethod.Post))
+	{
+		@Html.AntiForgeryToken()
+		@Html.ValidationSummary(true)
+
+		<div class="form-item">
+			<div class="form-control">
+				@Html.DropDownListFor(m => m.FeedBackType, Model.FeedBackTypeList)
+				@Html.ValidationMessageFor(m => m.FeedBackType)
+			</div>
+		</div>
+
+		<div class="form-item">
+			<div class="form-control">
+				@Html.TextAreaFor(m => m.Content, new { @placeholder = "Açıklamanız..", @style = "height:100px;" })
+				@Html.ValidationMessageFor(m => m.Content)
+			</div>
+		</div>
+
+		<div class="form-item">
+			<div class="form-control">
+				<button type="submit" class="btn btn-primary"><i class="cdi cdi-share-alt2"></i>&nbsp;&nbsp;Gönder</button>
+			</div>
+		</div>
+	}
+</div>

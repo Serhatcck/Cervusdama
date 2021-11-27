@@ -1,0 +1,196 @@
+﻿@model IEnumerable<CervusDama.Data.Model.MediaModel.MediaListModel>
+@{
+	ViewBag.Title = "Medya Yönetimi";
+	Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+<div class="lightbox" id="detail-dialog">
+	<div class="dialog-box" style="width:70%;">
+		<div class="top">
+			<div class="title"><i class="fa fa-image"></i>&nbsp;&nbsp;Medya Detayları</div>
+			<div class="close">
+				<a href="javascript:void(0)" onclick="closeDialog('detail-dialog')">
+					<i class="fa fa-times"></i>
+				</a>
+			</div>
+		</div>
+		<div class="content">
+
+			<div class="alert" id="image-alert">
+				<div class="message"></div>
+				<div class="close"><i class="fa fa-times"></i></div>
+			</div>
+
+			<div class="image-box">
+				<div class="image-box-left">
+					<img src="" />
+				</div>
+				<div class="image-box-right">
+					<h2>Medya Bilgileri</h2>
+					<form class="form">
+						<input type="hidden" name="image-id" value="">
+						<div class="form-item">
+							<label>Resim İsmi</label>
+							<div class="form-control">
+								<input type="text" disabled="disabled" name="image-title" />
+							</div>
+						</div>
+
+						<div class="form-item">
+							<label>Yüklenme Tarihi</label>
+							<div class="form-control">
+								<input type="text" disabled="disabled" name="image-date" />
+							</div>
+						</div>
+
+						<div class="form-item">
+							<label>Resim Açıklaması (Alt)</label>
+							<div class="form-control">
+								<input type="text" name="image-alt" />
+							</div>
+						</div>
+
+						<div class="form-item">
+							<label>Resim Boyutu</label>
+							<div class="form-control">
+								<input type="text" name="image-size" disabled="disabled" />
+							</div>
+						</div>
+
+						<div class="form-item">
+							<label>Resim Türü</label>
+							<div class="form-control">
+								<input type="text" name="image-type" disabled="disabled" />
+							</div>
+						</div>
+
+						<div class="form-item">
+							<div class="form-control align-right">
+								<input type="button" value="Resmi Sil" class="btn btn-danger" name="form-btn" onclick="deleteImage()" />
+								<input type="button" value="Değişiklikleri Kaydet" class="btn btn-primary" name="form-btn" onclick="saveChanges()" />
+							</div>
+						</div>
+
+					</form>
+				</div>
+			</div>
+		</div>
+		<div class="footer"></div>
+	</div>
+</div>
+
+<div class="header">
+	<div class="title"><i class="fa fa-image fa-lg"></i> Medya</div>
+	<div class="input">
+		<a href="@Url.RouteUrl("Upload")">Medya Yükle</a>
+	</div>
+</div>
+<div class="content">
+	<div class="media-content" id="gallery-container">
+		<ul class="gallery" data-columns="9">
+
+			@foreach (var item in Model)
+			{
+				<!--Gallery Item-->
+				<li class="attachment">
+					<div class="attachment-preview">
+						<div class="thumbnail" onclick="imageDetail(@item.ID)">
+							<div class="centered">
+								<img src="http://localhost:9000/uploads/medium/@item.Title" />
+							</div>
+						</div>
+					</div>
+				</li>
+				<!--Gallery Item-->
+			}
+
+		</ul>
+	</div>
+</div>
+
+<script>
+
+	function imageDetail(id) {
+		$.ajax({
+			type: 'POST',
+			url: '/Media/ImageDetail',
+			data: { 'id': id },
+			success: function (data) {
+
+				if (data.status) {
+					var date = new Date(parseInt(/^\/Date\((.*?)\)\/$/.exec(data.mediaData.CreateAt)[1], 10));
+
+					$('#message-box').hide('fast');
+					$('input[name=image-id]').val(data.mediaData.ID);
+					$('#detail-dialog').find('img').attr('src', 'https://localhost:44354/uploads/original/' + data.mediaData.Title);
+					$('input[name=image-title]').val(data.mediaData.Title);
+					$('input[name=image-date]').val(("0" + date.getDate()).slice(-2) + '/' + ("0" + (date.getMonth() + 1)).slice(-2) + '/' + date.getFullYear() + ' ' + ('0' + date.getHours()).slice(-2) + ':' + ('0' + date.getMinutes()).slice(-2));
+					$('input[name=image-alt]').val(data.mediaData.Description);
+					//$('input[name=image-size]').val('Genişlik : ' + data.size[0] + " | Yükseklik : " + data.size[1]);
+					$('input[name=image-type]').val(data.mediaData.MediaType);
+					$('#detail-dialog').fadeIn();
+				} else {
+					alert('Bilinmeyen bir hata oluştu.');
+				}
+			}
+		});
+	}
+
+	function saveChanges() {
+		var text = $('input[name=image-alt]').val();
+		var id = $('input[name=image-id]').val();
+
+		if (text.length > 0) {
+			$.ajax({
+				type: 'POST',
+				url: '/Media/ImageInfoUpdate',
+				data: { 'id': id, 'description': text},
+				success: function (data) {
+
+					$('#image-alert .message').text(data.message);
+
+					if (data.status) {
+						$('#image-alert').removeClass('danger').addClass('success');
+					} else {
+						$('#image-alert').removeClass('success').addClass('danger');
+					}
+
+					$('#image-alert').slideDown();
+				}
+			});
+	}
+	}
+
+	function deleteImage() {
+
+		var result = confirm("Resmi silmek istediğinizden emin misiniz?");
+
+		if (result) {
+			var id = $('input[name=image-id]').val();
+
+			if (id > 0) {
+				$.ajax({
+					type: 'POST',
+					url: '/Media/Delete',
+					data: { 'id': id },
+					success: function (data) {
+
+						if (data.status) {
+							window.location.reload();
+						} else {
+							$('#image-alert .message').text(data.message);
+							$('#image-alert').removeClass('success').addClass('danger');
+							$('#image-alert').slideDown();
+						}
+					},
+					error: function () {
+						$('#image-alert .message').text('Silme işlemi sırasında bir hata oluştu.');
+						$('#image-alert').removeClass('success').addClass('danger');
+						$('#image-alert').slideDown();
+					}
+				});
+			}
+		}
+	}
+
+</script>

@@ -1,0 +1,26 @@
+﻿@model IEnumerable<CervusDama.Data.Model.ArticleModel.ArticleBigListModel>
+
+@foreach (var item in Model)
+{
+	<div class="form-post-card">
+		<div class="image">
+			<img src="~/uploads/medium/@item.Image" />
+		</div>
+		<div class="title"><a href="@Url.RouteUrl("ArticleDetail", new { userName = "@" + item.UserInfo.Slug, slug = item.Slug })">@item.Title</a></div>
+		<div class="info-text">
+			@item.Description
+		</div>
+		<div class="user-info">
+			<div class="profile">
+				<img src="~/Uploads/profile/@(item.UserInfo.Slug).png" alt="profile" />
+				<div class="author-content">
+					<a href="@Url.RouteUrl("UserProfile", new { slug = item.UserInfo.Slug })">@item.UserInfo.FirstName @item.UserInfo.LastName</a>
+					<small>@item.CreateAt.ToString("dd MMMM yyyy HH:mm")</small>
+				</div>
+			</div>
+			<div class="share">
+				<a href="javascript:void(0)"><i class="cdi cdi-visibility"></i>&nbsp;&nbsp;@item.Hit</a>
+			</div>
+		</div>
+	</div>
+}

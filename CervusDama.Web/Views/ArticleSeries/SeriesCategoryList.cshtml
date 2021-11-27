@@ -1,0 +1,19 @@
+﻿@model CervusDama.Data.Model.ArticleSeriesModel.ArticleSeriesCategoryListModel
+
+<h2 class="page-title">@Model.Title</h2>
+<ul>
+	@foreach (var item in Model.Categories.GroupBy(g => g.CategoryTitle))
+	{
+		<li>
+			<span class="category-title">@item.First().CategoryTitle</span>
+			<ul class="sub-menu">
+				@foreach (var subItem in item)
+				{
+					<li>
+						<i class="cdi cdi-arrow-right"></i>&nbsp;<a href="@Url.RouteUrl("ArticleSeriesDetail", new { articleSeriesSlug = Model.Slug, articleSlug = subItem.Slug })">@subItem.Title</a>
+					</li>
+				}
+			</ul>
+		</li>
+	}
+</ul>

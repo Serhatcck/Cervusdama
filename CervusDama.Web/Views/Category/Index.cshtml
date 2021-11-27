@@ -1,0 +1,50 @@
+﻿@model IEnumerable<CervusDama.Data.Model.CategoryModel.CategoryListModel>
+@{
+	ViewBag.Title = "Kategoriler";
+	Layout = "~/Views/Shared/_MainLayouth.cshtml";
+}
+
+<div class="page-container">
+	<h2 class="page-title">Kategoriler</h2>
+
+	<div class="category-list">
+
+		@foreach (var item in Model.Where(c => c.ParentID == 0))
+		{
+			<div class="category-item" style="background:@item.Color">
+				<div class="category-icon">
+					<i class="@item.Icon"></i>
+				</div>
+				<div class="category-title">
+					<a href="@Url.RouteUrl("CategoryDetail", new { slug = item.Slug })">@item.Title</a>
+				</div>
+				<div class="category-hit">
+					<span class="num">@item.Hit</span>
+					<span>Gönderi</span>
+				</div>
+				<div class="category-description">
+					@item.Description
+				</div>
+			</div>
+
+			foreach (var subItem in Model.Where(c => c.ParentID == item.ID))
+			{
+				<div class="sub-category">
+					<div class="category-icon">
+						<i class="@subItem.Icon"></i>
+					</div>
+					<div class="category-title">
+						<a href="@Url.RouteUrl("CategoryDetail", new { slug = subItem.Slug })">@subItem.Title</a>
+					</div>
+					<div class="category-hit">
+						<span class="num">@subItem.Hit</span>
+						<span>Gönderi</span>
+					</div>
+					<div class="category-description">
+						@subItem.Description
+					</div>
+				</div>
+			}
+		}
+	</div>
+</div>

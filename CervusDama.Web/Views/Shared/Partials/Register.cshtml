@@ -1,0 +1,90 @@
+﻿@model CervusDama.Data.Model.UserModel.RegisterModel
+<!--Register-->
+<div class="modal" id="register-box">
+	<div class="modal-content">
+		<div class="modal-top">
+			<div class="title"><i class="cdi cdi-admin-users"></i>&nbsp;&nbsp;Üye Kayıt</div>
+			<div class="close"><i class="cdi cdi-no-alt"></i></div>
+		</div>
+		<div class="modal-body">
+
+			@using (Html.BeginForm("Register", "User", FormMethod.Post, new { id = "register-form" }))
+			{
+
+				@Html.AntiForgeryToken()
+				@Html.ValidationSummary(true)
+
+				<div class="form-item">
+					<label for="FirstName">Adınız</label>
+					<div class="form-control">
+						@Html.TextBoxFor(m => m.FirstName, new { placeholder = "Asınız.." })
+					</div>
+				</div>
+				<div class="form-item">
+					<label for="LastName">Soyadınız</label>
+					<div class="form-control">
+						@Html.TextBoxFor(m => m.LastName, new { placeholder = "Soyadınız.." })
+					</div>
+				</div>
+				<div class="form-item">
+					<label for="Email">Email Adresi</label>
+					<div class="form-control">
+						@Html.TextBoxFor(m => m.Email, new { placeholder = "Email adresi.." })
+					</div>
+				</div>
+				<div class="form-item">
+					<label for="Password">Şifre</label>
+					<div class="form-control">
+						@Html.PasswordFor(m => m.Password, new { placeholder = "Şifre.." })
+					</div>
+				</div>
+				<div class="form-item">
+					<label for="RePassword">Şifre (Tekrar)</label>
+					<div class="form-control">
+						@Html.PasswordFor(m => m.RePassword, new { placeholder = "Şifre (Tekrar).." })
+					</div>
+				</div>
+				<div class="form-item">
+					<div class="form-control">
+						@Html.CheckBoxFor(m => m.UserAgreementIsCheck) <text>&nbsp;<a href="@Url.RouteUrl("NoticesAndPolicies")" target="_blank">Kullanıcı Sözleşmesi</a>'ni okudum ve kabul ediyorum.</text>
+					</div>
+				</div>
+				<div class="form-item" id="register-message" style="display:none"></div>
+			}
+		</div>
+		<div class="modal-footer">
+			<button class="btn btn-primary" onclick="$('#register-form').submit()">Kaydol</button>
+		</div>
+	</div>
+</div>
+<!--Register-->
+
+<script>
+	$(document).ready(function () {
+		$('#register-form').submit(function () {
+
+			$.ajax({
+				type: 'POST',
+				url: '/User/Register',
+				data: $(this).serialize(),
+				contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+				success: function (data) {
+					if (Array.isArray(data.Message)) {
+
+						var html = '';
+
+						$.each(data.Message, function (i, item) {
+							html += '<span class="' + (data.Status ? 'success' : 'error') + '">' + item + '</span>';
+						});
+
+						$('#register-message').html(html).show();
+					} else {
+						$('#register-message').html('<span class="' + (data.Status ? 'success' : 'error') + '">' + data.Message + '</span>').show();
+					}
+				}
+			});
+
+			return false;
+		});
+	});
+</script>

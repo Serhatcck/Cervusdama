@@ -1,0 +1,74 @@
+﻿<!DOCTYPE html>
+<html lang="tr">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="icon" href="~/Content/images/logo.png" type="image/x-icon" />
+	<link href="~/Content/third-party/cdicons/css/cdicons.css" rel="stylesheet" />
+	<link href="~/Content/style/style.css" rel="stylesheet" />
+	<script src="~/Content/script/jquery-3.5.1.min.js"></script>
+	<script src="~/Content/script/script.js"></script>
+	<title>Cervus Dama - @ViewBag.Title</title>
+</head>
+<body>
+
+	<header class="main-page">
+		@Html.Partial("Partials/MainMenu")
+	</header>
+
+	<div class="content">
+
+		@if (!User.Identity.IsAuthenticated)
+		{
+			@Html.Partial("Partials/Login");
+			@Html.Partial("Partials/Register");
+		}
+
+		@RenderBody()
+	</div>
+
+	<!--Footer-->
+	<footer class="footer">
+		<div class="footer-content">
+			<div class="content-item social">
+				<h3>Sosyal Medya Hesaplarımız</h3>
+				<a href="#"><i class="cdi cdi-facebook"></i></a>
+				<a href="#"><i class="cdi cdi-twitter"></i></a>
+				<a href="#"><i class="cdi cdi-instagram"></i></a>
+				<a href="#"><i class="cdi cdi-youtube"></i></a>
+			</div>
+			<div class="content-item">
+				<h3>Bölümlerimiz</h3>
+				<ul>
+					<li><a href="@Url.RouteUrl("Articles")">Makale Sistemi</a></li>
+					<li><a href="#">Soru &amp; Cevap Sistemi</a></li>
+					<li><a href="#">Kod Kütüphanesi</a></li>
+				</ul>
+			</div>
+			<div class="content-item">
+				<h3>Yardım Bağlantıları</h3>
+				<ul>
+					<li><a href="@Url.RouteUrl("UserAggrement")">Site Kuralları</a></li>
+					<li><a href="@Url.RouteUrl("Help")">Yardım Konuları</a></li>
+					<li><a href="@Url.RouteUrl("FeedBack")">Geri Bildirim Gönder</a></li>
+					<li><a href="@Url.RouteUrl("SiteMap")">Site Haritası</a></li>
+				</ul>
+			</div>
+			<div class="content-item">
+				<h3>Mutlaka Bakın</h3>
+				<ul>
+					<li><a href="#">Doğru Soru Sorma</a></li>
+				</ul>
+			</div>
+
+			<div class="copyright-text">Copyright &copy; 2020 Cervus Dama - Tüm hakları saklıdır.</div>
+		</div>
+	</footer>
+	<!--Footer-->
+
+	<button class="scroll-top">
+		<i class="cdi cdi-arrow-up-alt2"></i>
+	</button>
+
+</body>
+</html>

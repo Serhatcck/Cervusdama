@@ -1,0 +1,79 @@
+﻿
+
+@{
+	ViewBag.Title = "Bildirimler - Kullanıcı Sözleşmesi";
+	Layout = "~/Views/Shared/_MainLayouth.cshtml";
+}
+
+<div class="page-container ">
+	<div class="split-container user-aggrement">
+		<div class="split-left">
+			<h2 class="page-title">Kurallar ve Bildirimler</h2>
+			<ul class="nav-bar">
+				<li class="active">
+					<i class="cdi cdi-arrow-right-alt2"></i><a href="javascript:void(0)" data-tab="#public-rules">Kullanım Koşulları ve Üyelik Sözleşmesi</a>
+					<ul class="sub-item">
+						<li><i class="cdi cdi-arrow-right"></i><a href="#genel-kosullar">Genel kullanım koşulları</a></li>
+						<li><i class="cdi cdi-arrow-right"></i><a href="#uyelik-kosullari">Üyelik/Hesap kuralları</a></li>
+						<li><i class="cdi cdi-arrow-right"></i><a href="#makale-kosullari">Makale/Yazı bölümü kuralları</a></li>
+						<li><i class="cdi cdi-arrow-right"></i><a href="#makale-kosullari">Soru &amp; Cevap bölümü kuralları</a></li>
+						<li><i class="cdi cdi-arrow-right"></i><a href="#kodkutuphanesi-kosullari">Kod kütüphanesi bölümü kuralları</a></li>
+					</ul>
+				</li>
+				<li>
+					<i class="cdi cdi-arrow-right-alt2"></i><a href="javascript:void(0)" data-tab="#legal-notices">Yasal Bidirimler ve Yükümlülükler</a>
+					<ul class="sub-item">
+						<li><i class="cdi cdi-arrow-right"></i><a href="#kullanim-kosullari">Kullanım Koşulları</a></li>
+						<li><i class="cdi cdi-arrow-right"></i><a href="#sozlesme-tanim">Sözleşme Tanımları</a></li>
+						<li><i class="cdi cdi-arrow-right"></i><a href="#genel-hukumler">Genel Hükümler</a></li>
+						<li><i class="cdi cdi-arrow-right"></i><a href="#sozlesme-feshi">Sözleşme Feshi</a></li>
+					</ul>
+				</li>
+				<li>
+					<i class="cdi cdi-arrow-right-alt2"></i><a href="javascript:void(0)" data-tab="#cookies">Çerezler ve Çerez Kullanımı</a>
+					<ul class="sub-item">
+						<li><i class="cdi cdi-arrow-right"></i><a href="#cerez-politikasi">Çerez Politikası Nedir?</a></li>
+						<li><i class="cdi cdi-arrow-right"></i><a href="#cp-turkiye">Çerez Politikası ve Türkiye</a></li>
+						<li><i class="cdi cdi-arrow-right"></i><a href="#cp-tartisma">Çerez Politikası Tartışılma Sebepleri</a></li>
+						<li><i class="cdi cdi-arrow-right"></i><a href="#cp-cookienedir">Çerez (Cookie) Nedir?</a></li>
+						<li><i class="cdi cdi-arrow-right"></i><a href="#cp-cereztur">Kullanım Bakımndan Çerez Türleri</a></li>
+						<li><i class="cdi cdi-arrow-right"></i><a href="#cp-cerezsaklama">Saklanma Bakımından Çerez Türleri</a></li>
+						<li><i class="cdi cdi-arrow-right"></i><a href="#cp-cerezengelleme">Çerez Kullanımının Engellenmesi</a></li>
+					</ul>
+				</li>
+			</ul>
+		</div>
+		<div class="split-right user-aggrement-content">
+			<div class="vertical-tab">
+				<!--Tab Item-->
+				@Html.Partial("~/Views/Pages/UsageAgreement.cshtml")
+				<!--Tab Item-->
+				<!--Tab Item-->
+				@Html.Partial("~/Views/Pages/UserAgreement.cshtml")
+				<!--Tab Item-->
+				<!--Tab Item-->
+				@Html.Partial("~/Views/Pages/LegalNotices.cshtml")
+				<!--Tab Item-->
+				<!--Tab Item-->
+				@Html.Partial("~/Views/Pages/CookiePolicy.cshtml")
+				<!--Tab Item-->
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+	$(document).ready(function () {
+		var id = '';
+
+		$('a[data-tab]').click(function () {
+			id = $(this).data('tab');
+			$('.tab-item').hide();
+			$(id).fadeIn();
+
+			$('.nav-bar li').removeClass('active');
+
+			$(this).parent().addClass('active');
+		});
+	});
+</script>

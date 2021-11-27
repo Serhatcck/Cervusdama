@@ -1,0 +1,63 @@
+﻿
+@{
+	ViewBag.Title = "Medya Yükle";
+	Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+<div class="header">
+	<div class="title"><i class="fa fa-upload fa-lg"></i>&nbsp;&nbsp;Medya Yükle</div>
+</div>
+<div class="content">
+	<div class="upload-box" id="drag-area">
+		Yüklemek istediğiniz dosyaları bu alana sürükleyip bırakın.
+	</div>
+	<ul id="images">
+	</ul>
+</div>
+
+<script>
+
+	$(document).ready(function () {
+
+		$('#drag-area').on('dragover', function (event) {
+			event.preventDefault();
+			$(this).addClass('drag-active');
+		});
+
+		$('#drag-area').on('dragleave', function () {
+			$(this).removeClass('drag-active');
+		});
+
+		$('#drag-area').on('drop', function (event) {
+			event.preventDefault();
+
+			$(this).removeClass('drag-active');
+
+			var file_list = event.originalEvent.dataTransfer.files;
+
+			for (var i = 0; i < file_list.length; i++) {
+				var formData = new FormData();
+				formData.append('file', file_list[i]);
+
+				$.ajax({
+					url: '/Media/DoUpload',
+					type: 'POST',
+					data: formData,
+					contentType: false,
+					cache: false,
+					processData: false,
+					async: false,
+					success: function (data) {
+						if (data.status) {
+							$('#images').append('<li><div class="upload-preview"><img src="https://localhost:44354/uploads/thumbnail/' + data.fileName + '"/></div><div class="upload-filename">' + data.fileName + '<br/><span><i class="fa fa-check"></i>&nbsp;&nbsp;&nbsp;Yüklendi</span></div></li>');
+						} else {
+							alert('dosya yüklenemedi.');
+						}
+					}
+				});
+			}
+		});
+
+	});
+
+</script>

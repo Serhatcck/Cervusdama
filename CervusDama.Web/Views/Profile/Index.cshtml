@@ -1,0 +1,282 @@
+﻿@model CervusDama.Data.Model.ProfileModel.ProfileModel
+@{
+	ViewBag.Title = "Profil Sayfası";
+	Layout = "~/Views/Shared/_ProfileLayouth.cshtml";
+}
+
+<!--Profil silme onay-->
+<div class="modal" id="profile-delete-accept">
+	<div class="modal-content">
+		<div class="modal-top">
+			<div class="title"><i class="cdi cdi-dismiss"></i>&nbsp;&nbsp;Hesap silme onay!!</div>
+			<div class="close"><i class="cdi cdi-no-alt"></i></div>
+		</div>
+		<div class="modal-body">
+			@using (Html.BeginForm("DeleteAccount", "Profile", FormMethod.Post, new { id = "profile-delete-form" }))
+			{
+				<p class="modal-content-text">
+					Cervus Dama hesabınızı silmek istediğinizden emin misiniz?
+					<br />
+					Hesap silme işlemi geri alınamaz.
+					<br />
+					Hesap silme işlemine devam etmek için lütfen aşağıdaki onay kutusunu seçiniz.
+				</p>
+
+				<label>
+					<input type="checkbox" name="IsAccept" value="true" />&nbsp;&nbsp;&nbsp;Anladım, hesabımı silmek istiyorum.
+				</label>
+			}
+		</div>
+		<div class="modal-footer">
+			<span style="float:left;"></span>
+			<button class="btn btn-primary cancel-btn">İptal</button>
+			<button class="btn btn-danger" onclick="$('#profile-delete-form').submit()">Sil</button>
+		</div>
+	</div>
+</div>
+<!--Profil silme onay-->
+
+<div class="page-content">
+
+	<div class="user-profile-container">
+		<div class="profile-head">
+			<div class="profile-img">
+				@if (User.Identity.IsAuthenticated)
+				{
+					if (int.Parse(User.Identity.Name) == Model.ID)
+					{
+						using (Html.BeginForm("ChangeProfileImage", "Profile", FormMethod.Post, new { encytpe = "multipart/form-data", @class = "pi-form", id = "pi-form" }))
+						{
+							<input type="file" name="profileImage" />
+						}
+
+						<div class="img-tool" title="Profil resmi değiştir." id="profile-image-change">
+							<i class="cdi cdi-edit"></i>
+						</div>
+					}
+				}
+				<div class="tooltip"></div>
+				<img src="~/uploads/profile/@(Model.Slug).png" alt="Profil Resmi" id="profile-image" />
+			</div>
+			<div class="profile-info">
+				<div class="info-header">
+					<h1>@Model.FirstName @Model.LastName <i class="cdi cdi-star-filled" style="color: #1BC5BD; font-size:13px;"></i></h1>
+
+					@if (User.Identity.IsAuthenticated)
+					{
+						if (int.Parse(User.Identity.Name) == Model.ID)
+						{
+							<a href="#ayarlar" onclick="$('a[data-index=ayarlar]').trigger('click');">Bilgileri Düzenle</a>
+						}
+					}
+				</div>
+				<div class="info-body">
+					<div class="info-item">
+						<i class="cdi cdi-location"></i> @Model.CityName
+					</div>
+					<div class="info-item">
+						<i class="cdi cdi-admin-site"></i> <a href="@Model.WebSite">@Model.WebSite</a>
+					</div>
+					<div class="info-item">
+						<i class="cdi cdi-calendar"></i> Üyelik : @Model.CreateAt.ToString("dd MMMM yyyy") <small>@Model.CreateAt.ToString("HH:mm")</small>
+					</div>
+				</div>
+				<div class="bio">
+					@Model.Bio
+				</div>
+			</div>
+		</div>
+		<div class="profile-body">
+			<ul>
+				<li>
+					<i class="flaticon-file-2"></i>
+					<div class="user-counter-data">
+						<h5>Makaleler</h5>
+						<span>@Model.ArticleCount</span>
+					</div>
+				</li>
+				<li>
+					<i class="flaticon-chat-1"></i>
+					<div class="user-counter-data">
+						<h5>Yorum</h5>
+						<span>@Model.CommentCount</span>
+					</div>
+				</li>
+				<li>
+					<i class="flaticon-questions-circular-button"></i>
+					<div class="user-counter-data">
+						<h5>Soru</h5>
+						<span>@Model.QuestionCount</span>
+					</div>
+				</li>
+				<li>
+					<i class="flaticon-lifebuoy"></i>
+					<div class="user-counter-data">
+						<h5>Cevap</h5>
+						<span>@Model.AnswerCount</span>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</div>
+
+	<div class="user-profile-container">
+		<div class="tab-control">
+			<!--Tab header-->
+			<div class="tab-header">
+				<ul>
+					<li>
+						<a href="#makale" data-index="makale"><i class="cdi cdi-clipboard"></i>Makaleler</a>
+					</li>
+
+					<li>
+						<a href="#sorular" data-index="sorular"><i class="cdi cdi-editor-help"></i>Soru &amp; Cevap</a>
+					</li>
+
+					@if (User.Identity.IsAuthenticated)
+					{
+						if (int.Parse(User.Identity.Name) == Model.ID)
+						{
+							<li>
+								<a href="#ayarlar" data-index="ayarlar"><i class="cdi cdi-admin-generic"></i>Profil Ayarları</a>
+							</li>
+						}
+					}
+				</ul>
+			</div>
+			<!--Tab header-->
+			<!--Tab content-->
+			<div class="tab-content">
+				<div class="tab-item" data-tab="makale">
+					<div class="tab-title">
+						<h1>Eklediğiniz Makaleler</h1>
+						<div class="search-box">
+							<input type="text" name="articleSearch" placeholder="Makaleler içerisinde arayın.." />
+							<input type="hidden" name="profileUserID" value="@Model.ID" />
+							<button>
+								<i class="cdi cdi-search"></i>
+							</button>
+						</div>
+					</div>
+
+					<div class="profile-articles" id="article-base">
+						@{
+							Html.RenderAction("ProfileArticles", "Profile", new { id = Model.ID });
+						}
+					</div>
+
+					<div class="profile-articles" id="article-search"></div>
+				</div>
+
+				<div class="tab-item" data-tab="sorular">
+					<div class="tab-title">
+						<h1>Gönderilen sorular..</h1>
+					</div>
+					<div class="profile-articles" id="question-base">
+						@{ Html.RenderAction("QuestionList", "Profile", new { id = Model.ID }); }
+					</div>
+
+					<div class="tab-title">
+						<h1>Gönderilen cevaplar..</h1>
+					</div>
+					<div class="profile-articles" id="answer-base">
+						@{ Html.RenderAction("AnsweredQuestionList", "Profile", new { id = Model.ID }); }
+					</div>
+				</div>
+
+				@if (User.Identity.IsAuthenticated)
+				{
+					if (int.Parse(User.Identity.Name) == Model.ID)
+					{
+						<div class="tab-item" data-tab="ayarlar">
+							<div class="tab-title">
+								<h1>Kişisel Bilgiler</h1>
+							</div>
+
+							@{ Html.RenderAction("PersonalInfoUpdate", "Profile"); }
+
+							<div class="tab-title">
+								<h1>İletişim Bilgileri</h1>
+							</div>
+
+							@{ Html.RenderAction("ConnectInfoUpdate", "Profile"); }
+
+							<div class="tab-title">
+								<h1>Şifre Değiştir</h1>
+							</div>
+
+							@{ Html.RenderAction("PasswordUpdate", "Profile"); }
+
+							<div class="tab-title">
+								<h1 style="color: #d95b44;">Hesabı Kapat</h1>
+							</div>
+
+							<div class="alert" id="profile-delete-alert">
+								<div class="message"></div>
+								<div class="close">
+									<i class="cdi cdi-no-alt"></i>
+								</div>
+							</div>
+
+							<div class="profile-content">
+								<p>Cervus Dama hesabınızı kapatmak için buradaki opsiyonu kullanabilirsiniz.</p>
+								<p>
+									Hesabınızı kapatırsanız aşağıda belirtilen verileriniz kalıcı olarak silinecektir. <span style="color: #d95b44;">Silinen veriler geri getirilemez, hesabınızı silerken dikkat ediniz.</span>
+									<ul>
+										<li>Üyelik bilgileriniz (oturum açma, kişisel bilgileriniz, profil resminiz, profil detaylarınız).</li>
+										<li>Sorduğunuz sorular ve eklemiş olduğunuz cevaplar.</li>
+										<li>Paylaşımlara gönderdiğiniz yorumlar ve beğeniler.</li>
+									</ul>
+								</p>
+
+								<div class="form-item">
+									<div class="form-control" style="text-align:right">
+										<button class="btn btn-danger" data-trigger="modal" data-target="#profile-delete-accept">Hesabı Kapat</button>
+									</div>
+								</div>
+
+							</div>
+						</div>
+					}
+				}
+			</div>
+			<!--Tab content-->
+		</div>
+	</div>
+</div>
+
+<script>
+
+	$(document).ready(function () {
+
+		var link = window.location.href;
+
+		if (link.indexOf('#') > 0) {
+			var part = link.split('#');
+			var tab_id = part[part.length - 1];
+
+			if ($('.tab-content div[data-tab="' + tab_id + '"]').length > 0) {
+				$('.tab-header ul li').removeClass('active');
+				$('a[data-index="' + tab_id + '"]').parent().addClass('active');
+				$('div[data-tab="' + tab_id + '"]').fadeIn(500);
+			} else {
+				$('.tab-header ul li:eq(0)').addClass('active');
+				$('.tab-item:eq(0)').fadeIn(500);
+			}
+		} else {
+			$('.tab-header ul li:eq(0)').addClass('active');
+			$('.tab-item:eq(0)').fadeIn(500);
+		}
+
+		$('a[data-index]').click(function () {
+			var id = $(this).data('index');
+			$('.tab-item').hide();
+
+			$('.tab-header ul li').removeClass('active');
+			$(this).parent().addClass('active');
+
+			$('div[data-tab="' + id + '"]').fadeIn(500);
+		});
+	});
+
+</script>

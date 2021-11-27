@@ -1,0 +1,12 @@
+﻿
+@{
+    ViewBag.Title = "Kategori bulunamadı!!";
+    Layout = "~/Views/Shared/_ErrorLayout.cshtml";
+}
+
+<div class="error-container">
+	<h1>Bu bir hata değil!</h1>
+	<p>Yalnız görüntülemek istediğin kategoriyi bulamadık ya da böyle bir kategori hiç olmadı..</p>
+	<p>Makale listesine <a href="@Url.RouteUrl("Articles")">geri dön.</a></p>
+	<img src="~/Content/images/error.png" />
+</div>

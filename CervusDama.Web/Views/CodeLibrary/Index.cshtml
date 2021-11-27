@@ -1,0 +1,45 @@
+﻿@{
+	ViewBag.Title = "Kod Kütüphanesi";
+	Layout = "~/Views/Shared/_MainLayouth.cshtml";
+}
+
+
+<div class="page-container">
+	<h1 class="page-title">Kod Kütüphanesi</h1>
+
+	<div class="code-container">
+		@for (int i = 0; i < 10; i++)
+		{
+			<div class="code-item">
+				<div class="title">
+					<a href="#">Kod parçası ismi</a>
+					<i class="devicon-java-plain colored"></i>
+				</div>
+				<div class="description">Buraya kod kütüphanesi ile ilgili bir kısa açıklama yazısı yazılacak. İşte kod ne işe yarıyor. Özellikleri ne filan.</div>
+				<div class="tickets">
+					<ul>
+						<li><a href="#">C#</a></li>
+						<li><a href="#">algoritma</a></li>
+						<li><a href="#">binary search</a></li>
+						<li><a href="#">programlama</a></li>
+						<li><a href="#">istemci</a></li>
+					</ul>
+				</div>
+				<div class="footer">
+
+					<ul>
+						<li><a href="#">Çağlar Özcan</a></li>
+						<li>
+							<a href="#"><i class="cdi cdi-star-empty"></i></a>&nbsp;&nbsp;<small>15</small>
+						</li>
+					</ul>
+
+					
+					<span>@DateTime.Now.ToString("dd MMMM yyyy HH:mm")</span>
+				</div>
+			</div>
+		}
+
+	</div>
+
+</div>

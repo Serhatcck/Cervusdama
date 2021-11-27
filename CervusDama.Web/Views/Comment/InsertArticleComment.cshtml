@@ -1,0 +1,29 @@
+﻿@model CervusDama.Data.Model.CommentModel.CommentInsertModel
+
+
+@if (User.Identity.IsAuthenticated)
+{
+	using (Html.BeginForm("InsertArticleComment", "Comment", FormMethod.Post, new { id = "comment-form" }))
+	{
+		@Html.AntiForgeryToken()
+
+		<div class="form-item">
+			<div class="form-control">
+				@Html.TextAreaFor(m => m.Content, new { placeholder = "Yorum Ekle..", style = "height:100px;", id="comment-content" })
+				@Html.HiddenFor(m => m.Slug)
+				@Html.HiddenFor(m => m.ArticleID)
+			</div>
+		</div>
+
+		<div class="form-item">
+			<div class="form-control" style="text-align:right;">
+				<span style="float:left;" id="letter-counter"></span>
+				<button class="btn btn-primary"><i class="cdi cdi-share-alt"></i> Yorum Gönder</button>
+			</div>
+		</div>
+	}
+}
+else
+{
+	<div class="no-content">Yorum eklemek için Cervus Dama üyesi olmalısınız.</div>
+}

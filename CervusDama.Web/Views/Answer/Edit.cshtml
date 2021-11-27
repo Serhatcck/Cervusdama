@@ -1,0 +1,25 @@
+﻿@model CervusDama.Data.Model.AnswerModel.AnswerEditModel
+
+
+@if (User.Identity.IsAuthenticated)
+{
+    using (Html.BeginForm("EditArticleComment", "Comment", FormMethod.Post, new { id = "answer-edit-form", style = "display:none;" }))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-item">
+            <div class="form-control">
+                @Html.TextAreaFor(m => m.Content, new { placeholder = "Cevap İçeriği..", style = "height:100px;", id = "answer-edit-content" })
+                @Html.HiddenFor(m => m.ID)
+            </div>
+        </div>
+
+        <div class="form-item">
+            <div class="form-control" style="text-align:right;">
+                <span style="float:left;" id="letter-counter"></span>
+                <button class="btn btn-primary" type="submit"><i class="cdi cdi-share-alt"></i> Cevap Düzenle</button>
+                <button class="btn btn-danger" type="button" id="form-btn-cancel">İptal</button>
+            </div>
+        </div>
+    }
+}

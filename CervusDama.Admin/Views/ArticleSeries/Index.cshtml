@@ -1,0 +1,120 @@
+﻿@model IEnumerable<CervusDama.Data.Model.ArticleSeriesModel.ArticleSeriesListModel>
+@using CervusDama.Admin.Helpers
+@{
+	ViewBag.Title = "Seri Makaleler";
+	Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+<div class="header">
+	<div class="title"><i class="fa fa-mail-bulk fa-lg"></i>&nbsp;&nbsp;SERİ YAZILAR</div>
+	<div class="input">
+		<a href="@Url.RouteUrl("ArticleSeriesInsert")">Seri Yazı Oluştur</a>
+	</div>
+</div>
+<div class="content">
+
+	<div class="alert" id="alert">
+		<div class="message"></div>
+		<div class="close"><i class="fa fa-times"></i></div>
+	</div>
+
+	<table class="data-table strip hovered">
+		<thead>
+			<tr>
+				<th class="check">#</th>
+				<th>Seri İsmi</th>
+				<th>Slug</th>
+				<th>Kategori Sayısı</th>
+				<th>Makale Sayısı</th>
+				<th class="date">Eklenme Tarihi</th>
+				<th class="prc" colspan="3">İşlemler</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var item in Model)
+			{
+			<tr>
+				<td class="center"><input type="checkbox" /></td>
+				<td>@item.Title</td>
+				<td>@item.Slug</td>
+				<td>@item.CategoryCount</td>
+				<td>@item.ArticleCount</td>
+				<td>@item.CreateAt.ToString("dd MMMM yyyy HH:mm")</td>
+				<td class="option">
+					<a href="@Url.RouteUrl("ArticleEdit", new { id = item.ID })" class="green edit-link"><i class="fa fa-edit"></i></a>
+				</td>
+				<td class="option">
+					<a href="javascript:void(0)" data-id="@item.ID" class="@(item.Status == 1 ? "blue" : "ban") ban-link"><i class="fa fa-ban"></i></a>
+				</td>
+				<td class="option">
+					<a href="javascript:void(0)" data-id="@item.ID" class="remove delete-link"><i class="fa fa-times"></i></a>
+				</td>
+			</tr>
+			}
+		</tbody>
+		<tfoot>
+			<tr>
+				<td colspan="9">
+					@Html.Pager((int)ViewBag.currentPage, (int)ViewBag.totalData, "/seri-yazilar")
+				</td>
+			</tr>
+		</tfoot>
+	</table>
+
+</div>
+
+<script>
+
+	$(document).ready(function () {
+		$('.delete-link').click(function () {
+			var res = confirm('Makale serisini silmek istediğinizden emin misiniz?');
+
+			if (res == true) {
+				$.ajax({
+					type: 'POST',
+					url: '/ArticleSeries/Delete',
+					data: { 'id': $(this).data('id') },
+					success: function (data) {
+						if (data.status) {
+							$('#alert').removeClass('danger').addClass('success');
+						} else {
+							$('#alert').removeClass('success').addClass('danger');
+						}
+
+						$('#alert .message').html(data.message);
+
+						$('#alert').slideDown();
+
+						setTimeout(function () {
+							window.location.reload();
+						}, 2000);
+					}
+				});
+			} 
+		});
+
+		$('.ban-link').click(function () {
+			$.ajax({
+				type: 'POST',
+				url: '/ArticleSeries/Block',
+				data: { 'id': $(this).data('id') },
+				success: function (data) {
+					if (data.status) {
+						$('#alert').removeClass('danger').addClass('success');
+					} else {
+						$('#alert').removeClass('success').addClass('danger');
+					}
+
+					$('#alert .message').html(data.message);
+
+					$('#alert').slideDown();
+
+					setTimeout(function () {
+						window.location.reload();
+					}, 2000);
+				}
+			});
+		});
+	});
+
+</script>

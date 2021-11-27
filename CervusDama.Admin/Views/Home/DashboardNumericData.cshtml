@@ -1,0 +1,39 @@
+﻿@model CervusDama.Data.Model.DashBoardModel.DashboardNumericDataModel
+
+<div class="info-box">
+	<div class="info-item">
+		<div class="title">Makale Verileri</div>
+		<div class="data">Bugün : @Model.Articles.ToDay</div>
+		<div class="data">Bu hafta : @Model.Articles.ToWeek</div>
+		<div class="data">Bu Ay : @Model.Articles.ToMonth</div>
+		<div class="data">Toplam : @Model.Articles.Total</div>
+	</div>
+	<div class="info-item">
+		<div class="title">Kullanıcı Verileri</div>
+		<div class="data">Bugün : @Model.Users.ToDay</div>
+		<div class="data">Bu hafta : @Model.Users.ToWeek</div>
+		<div class="data">Bu Ay : @Model.Users.ToMonth</div>
+		<div class="data">Toplam : @Model.Users.Total</div>
+	</div>
+	<div class="info-item">
+		<div class="title">Soru &amp; Cevap</div>
+		<div class="data">Bugün : @Model.Questions.ToDay</div>
+		<div class="data">Bu hafta : @Model.Questions.ToWeek</div>
+		<div class="data">Bu Ay : @Model.Questions.ToMonth</div>
+		<div class="data">Toplam : @Model.Questions.Total</div>
+	</div>
+	<div class="info-item">
+		<div class="title">Kod Kütüphanesi</div>
+		<div class="data">Bugün : @Model.CodeLibraries.ToDay</div>
+		<div class="data">Bu hafta : @Model.CodeLibraries.ToWeek</div>
+		<div class="data">Bu Ay : @Model.CodeLibraries.ToMonth</div>
+		<div class="data">Toplam : @Model.CodeLibraries.Total</div>
+	</div>
+	<div class="info-item">
+		<div class="title">Diğer</div>
+		<div class="data">Kategori : @Model.Categories.Total</div>
+		<div class="data">Etiket : @Model.Tickets.Total</div>
+		<div class="data">Medya : @Model.Media.Total</div>
+		<div class="data">Makale Serisi : @Model.ArticleSeries.Total</div>
+	</div>
+</div>
